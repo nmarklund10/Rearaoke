@@ -1,0 +1,3 @@
+[submodule "WebKaroke"]
+	path = WebKaroke
+	url = https://github.com/nmarklund10/WebKaroke
