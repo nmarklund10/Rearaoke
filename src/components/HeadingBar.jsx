@@ -24,7 +24,7 @@ export default function HeadingBar(props) {
   const onTrigger = () => {
       props.parentCallback();
   }
-  const icon = props.isLightTheme ? <Brightness3Icon/> : <Brightness7Icon/>
+  const icon = props.isLightTheme ? <Brightness3Icon/> : <Brightness7Icon/>;
 
   return (
     <AppBar position="static">
