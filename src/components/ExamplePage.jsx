@@ -1,10 +1,11 @@
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
+import Card from '@material-ui/core/Card';
 
-function ExamplePage() {
-    let { msg } = useParams()
-    return (
-        <p> Message: {msg} </p>
-    );
+export default function ExamplePage() {
+  let { msg } = useParams()
+  return (
+    <Card>
+      Message: {msg}
+    </Card>
+  );
 }
-
-export default ExamplePage;
