@@ -11,7 +11,7 @@ export default async function createBackground() {
   // keyModels[1].position.set(canvas.width / 8, 3 * (canvas.height / 4), 0);
   // keyModels[2].position.set(7 * (canvas.width / 8), canvas.height / 4, 0);
   // keyModels[3].position.set(7 * (canvas.width / 8), 3 * (canvas.height / 4), 0);
-  for (const [i, note] of keyModels.entries()) {
+  for (const [, note] of keyModels.entries()) {
     note.rotation.x += 1.5
     // note.position.set(canvas.width / 8, canvas.height / 4, 0)
     scene.add(note);
