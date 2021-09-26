@@ -10,16 +10,17 @@ import createBackground from './js/webgl';
 
 export default function App() {
   const [isLightTheme, setTheme] = useState(getCachedTheme());
-  const appliedTheme = createTheme(isLightTheme ? light : dark);
+  const [appliedTheme, setAppliedTheme] = useState(createTheme(isLightTheme ? light : dark));
 
   const handleCallback = () => {
     setTheme(!isLightTheme);
+    setAppliedTheme(createTheme(isLightTheme ? light : dark))
     localStorage.setItem('theme', !isLightTheme);
   }
 
   useEffect(() => {
-    createBackground();
-  }, []);
+    createBackground(appliedTheme.palette.grey[400]);
+  }, [appliedTheme]);
 
   return (
     <ThemeProvider theme={appliedTheme}>

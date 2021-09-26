@@ -2,9 +2,9 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import keys_obj from '../static/Keys_Obj.obj';
 import * as THREE from 'three';
 
-export default async function createBackground() {
+export default async function createBackground(backgroundColor) {
   const canvas = document.querySelector('#bg');
-  const [scene, camera, renderer] = setupThreeJs(canvas);
+  const [scene, camera, renderer] = setupThreeJs(canvas, backgroundColor);
 
   const keyModels = await createNotes();
   // keyModels[0].position.set(canvas.width / 8, canvas.height / 4, 0);
@@ -23,8 +23,9 @@ export default async function createBackground() {
   animate(scene, camera, renderer, keyModels);
 }
 
-function setupThreeJs(canvas) {
+function setupThreeJs(canvas, backgroundColor) {
   const scene = new THREE.Scene();
+  scene.background = new THREE.Color(backgroundColor)
 
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
