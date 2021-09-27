@@ -25,7 +25,7 @@ export default function AudioProgress() {
       <LinearProgress className={classes.audioProgress} variant="determinate" value={100}/>
       <div className={classes.progressText}>
         <span>.. / ..</span>
-        <span className={classes.audioFileName}>No audio file selected</span>
+        <span className={classes.audioFileName}>No song loaded</span>
       </div>
     </>
   );

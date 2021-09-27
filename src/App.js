@@ -14,12 +14,12 @@ export default function App() {
 
   const handleCallback = () => {
     setTheme(!isLightTheme);
-    setAppliedTheme(createTheme(isLightTheme ? light : dark))
+    setAppliedTheme(createTheme(!isLightTheme ? light : dark))
     localStorage.setItem('theme', !isLightTheme);
   }
 
   useEffect(() => {
-    createBackground(appliedTheme.palette.grey[400]);
+    createBackground(appliedTheme.palette.secondary.main);
   }, [appliedTheme]);
 
   return (
