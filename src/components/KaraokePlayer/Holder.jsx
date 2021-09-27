@@ -27,7 +27,7 @@ export default function Holder() {
             alignItems='center' justifyContent='center'>
         <Grid item>
           <Paper variant='outlined' className={classes.karaokeHolder}>
-            <Card color='primary'>
+            <Card>
               <CardContent>
                 <Typography variant='h3' align='center'>Rearaoke</Typography>
                 <Typography variant='h4' className={classes.paddedHeader}>Audio Control</Typography>
