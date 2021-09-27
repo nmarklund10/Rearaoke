@@ -1,9 +1,21 @@
+import { blueGrey } from "@material-ui/core/colors";
+
 export const light = {
-  palette: { type: "light" }
+  palette: {
+    type: 'light',
+    secondary: {
+      main: blueGrey[100]
+    }
+  }
 };
 
 export const dark = {
-  palette: { type: "dark" }
+  palette: {
+    type: 'dark',
+    secondary: {
+      main: blueGrey[300]
+    }
+  }
 };
 
 export function getCachedTheme() {
