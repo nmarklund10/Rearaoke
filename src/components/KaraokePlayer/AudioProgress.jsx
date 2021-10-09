@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function AudioProgress() {
+export default function AudioProgress(props) {
   const classes = useStyles();
 
   return (
