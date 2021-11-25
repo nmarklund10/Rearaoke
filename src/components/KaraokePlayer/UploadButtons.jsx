@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSong } from './songSlice';
+import { setSongError } from './songErrorSlice';
+import { parseLrcFile } from '../../js/lrcFileParser';
 import { ButtonGroup, Button, Slider, FormGroup } from '@material-ui/core';
 import AttachFileRoundedIcon from '@material-ui/icons/AttachFileRounded';
 import MusicNoteRoundedIcon from '@material-ui/icons/MusicNoteRounded';
@@ -36,41 +39,47 @@ const useStyles = makeStyles((theme) => ({
 export default function UploadButtons(props) {
   const classes = useStyles();
   const song = useSelector((state) => state.song.value);
-  let audioSrc = '';
-  try {
-    audioSrc = props.audioRef.current.src;
-  } catch(e) {}
+  const audioSrc = props.audioRef.current !== undefined ? props.audioRef.current.src : ''
   const dispatch = useDispatch();
   const controlButtonsDisabled = song === null || audioSrc === '';
+  const [lrcKey, setLrcKey] = useState(Date.now());
+  const [audioKey, setAudioKey] = useState(Date.now());
 
-  const onLrcUploadChange = (event) => {
+  const onLrcUploadInput = (event) => {
     const files = event.target.files;
 
     if (files.length === 0) {
-      console.error('File upload failed!');
+      dispatch(setSongError('File upload failed!'));
     }
     else {
       const file = files[0];
       const reader = new FileReader();
       reader.addEventListener('load', (loadEvent) => {
-        let lrc = loadEvent.target.result;
-        dispatch(setSong(lrc));
+        let lrcFileData = loadEvent.target.result;
+        try {
+          let parsedSong= parseLrcFile(lrcFileData);
+          dispatch(setSong(parsedSong));
+        } catch(error) {
+          dispatch(setSongError(error.message));
+        }
+        setLrcKey(Date.now());
       });
       reader.readAsText(file);
     }
   }
 
-  const onAudioUploadChange = (event) => {
+  const onAudioUploadInput = (event) => {
     const files = event.target.files;
 
     if (files.length === 0) {
-      console.error('File upload failed!');
+      dispatch(setSongError('File upload failed!'));
     }
     else {
       const file = files[0];
       let audioUrl = URL.createObjectURL(file);
       props.audioRef.current.src = audioUrl;
     }
+    setLrcKey(Date.now());
   }
 
   return (
@@ -78,15 +87,15 @@ export default function UploadButtons(props) {
       <FormGroup className={classes.controls}>
         <ButtonGroup disableElevation={true} variant="contained">
           <Button className={classes.uploadButton} component="label"
-                  onChange={onLrcUploadChange} endIcon={<AttachFileRoundedIcon/>}>
+                  onInput={onLrcUploadInput} endIcon={<AttachFileRoundedIcon/>}>
             .LRC
-            <input type="file" hidden />
+            <input type="file" hidden key={lrcKey}/>
           </Button>
           <Button className={classes.uploadButton} component="label"
-                  onChange={onAudioUploadChange} endIcon={<MusicNoteRoundedIcon/>}
+                  onInput={onAudioUploadInput} endIcon={<MusicNoteRoundedIcon/>}
                   disabled={song === null}>
             Audio
-            <input type="file" hidden />
+            <input type="file" hidden key={audioKey} />
           </Button>
           <Button className={classes.controlButton} disabled={controlButtonsDisabled}>
             <PlayArrowRoundedIcon/>
