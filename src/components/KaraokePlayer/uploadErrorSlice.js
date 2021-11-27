@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const songErrorSlice = createSlice({
-  name: 'songError',
+export const uploadErrorSlice = createSlice({
+  name: 'uploadError',
   initialState: {
     value: null,
   },
   reducers: {
-    setSongError: (state, action) => {
+    setUploadError: (state, action) => {
       return {
         ...state,
         value: action.payload
@@ -16,6 +16,6 @@ export const songErrorSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setSongError } = songErrorSlice.actions
+export const { setUploadError } = uploadErrorSlice.actions
 
-export default songErrorSlice.reducer
+export default uploadErrorSlice.reducer
