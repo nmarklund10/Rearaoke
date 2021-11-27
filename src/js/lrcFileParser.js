@@ -117,12 +117,14 @@ function addLyricLine(karaoke, lrcLine) {
   else {
     if ((lrcLine.time - previousLyric.end) >= BREAK_TIME) {
       karaoke.push({
+        index: karaoke.length,
         start: previousLyric.end + 1,
         lyric: BREAK_TEXT,
         end: lrcLine.time - 1
       });
     }
     karaoke.push({
+      index: karaoke.length,
       start: lrcLine.time,
       lyric: lrcLine.lyric,
       end: PLACEHOLDER
