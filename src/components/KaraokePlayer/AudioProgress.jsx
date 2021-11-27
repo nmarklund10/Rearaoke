@@ -5,12 +5,13 @@ import { secondsToString } from '../../js/time';
 
 const useStyles = makeStyles((theme) => ({
   audioProgress: {
-    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.main,
     width: '40vw',
     height: theme.spacing(1),
     borderRadius: theme.spacing(3),
+    cursor: 'pointer'
   },
-  audioFileName: {
+  audioFileStatus: {
     float: 'right'
   },
   progressText: {
@@ -21,16 +22,17 @@ const useStyles = makeStyles((theme) => ({
 export default function AudioProgress() {
   const classes = useStyles();
   const song = useSelector((state) => state.song.value);
+  const seekValue = song.seekValue === null ? 0 : song.seekValue;
   const currentTime = song.currentTime === null ? '..' : secondsToString(song.currentTime);
   const totalTime = song.duration === null ? '..' : secondsToString(song.duration);
-  const songName = song.src === null ? 'No song loaded' : '';
+  const resetAudioFileleStatus = song.src === null ? 'No song loaded' : '';
 
   return (
     <>
-      <LinearProgress className={classes.audioProgress} variant="determinate" value={100}/>
+      <LinearProgress className={classes.audioProgress} variant="determinate" value={seekValue}/>
       <div className={classes.progressText}>
         <span>{currentTime} / {totalTime}</span>
-        <span className={classes.audioFileName}>{songName}</span>
+        <span className={classes.audioFileStatus}>{resetAudioFileleStatus}</span>
       </div>
     </>
   );
