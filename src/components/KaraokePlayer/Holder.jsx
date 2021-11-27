@@ -4,7 +4,7 @@ import { Paper, Grid, Card, CardContent, Typography, Collapse, IconButton } from
 import { Alert } from '@material-ui/lab';
 import { useSelector, useDispatch } from 'react-redux';
 import AudioProgress from './AudioProgress';
-import UploadButtons from './UploadButtons';
+import UploadButtons from './UploadButtons/UploadButtons';
 import LyricWindow from './LyricWindow';
 import '@fontsource/roboto';
 import { setUploadError } from './uploadErrorSlice';
@@ -71,7 +71,7 @@ export default function Holder() {
     else {
       dispatch(setSongDuration(audioDuration));
       dispatch(setSongCurrentTime(audioRef.current.currentTime));
-      dispatch(setSongSeekValue(audioRef.current.seekValue));
+      dispatch(setSongSeekValue(0));
     }
   }
 
