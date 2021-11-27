@@ -8,8 +8,8 @@ import { setSong } from '../songSlice';
 
 
 export default function LrcUpload(props) {
-  const uploadButtonClass = props.uploadButtonClass;
   const dispatch = useDispatch();
+  const uploadButtonClass = props.uploadButtonClass;
   const [lrcKey, setLrcKey] = useState(Date.now());
 
   const onLrcUploadInput = (event) => {

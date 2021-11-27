@@ -6,10 +6,10 @@ import { setUploadError } from '../uploadErrorSlice';
 import { setSongSrc } from '../songSlice';
 
 export default function AudioUpload(props) {
+  const dispatch = useDispatch();
   const uploadButtonClass = props.uploadButtonClass;
   const disabled = props.disabled;
   const [audioKey, setAudioKey] = useState(Date.now());
-  const dispatch = useDispatch();
 
   const onAudioUploadInput = (event) => {
     const files = event.target.files;
