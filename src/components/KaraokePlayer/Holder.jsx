@@ -6,9 +6,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import AudioProgress from './AudioProgress';
 import UploadButtons from './UploadButtons';
 import LyricWindow from './LyricWindow';
-import "@fontsource/roboto";
-import { setSongError } from './songErrorSlice';
+import '@fontsource/roboto';
+import { setUploadError } from './uploadErrorSlice';
+import { setSongDuration, setSongCurrentTime, setSongSeekValue, setSongSrc } from './songSlice';
 import CloseIcon from '@material-ui/icons/Close';
+import NowPlaying from './NowPlaying';
 
 const useStyles = makeStyles((theme) => ({
   karaokeContainer: {
@@ -30,18 +32,47 @@ const useStyles = makeStyles((theme) => ({
 export default function Holder() {
   const classes = useStyles();
   const audioRef = useRef();
-  const song = useSelector((state) => state.song.value);
-  const songError = useSelector((state) => state.songError.value);
+  const songSrc = useSelector((state) => state.song.value.src);
+  const songKaraoke = useSelector((state) => state.song.value.karaoke);
+  const uploadError = useSelector((state) => state.uploadError.value);
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(songError !== null);
+  const [open, setOpen] = useState(uploadError !== null);
+
+  if (songKaraoke !== null) {
+    var lrcDuration = songKaraoke[songKaraoke.length - 1].end;
+  }
 
   useEffect(() => {
-    setOpen(songError !== null);
-  }, [songError]);
+    audioRef.current.src = songSrc;
+  }, [songSrc]);
+
+  useEffect(() => {
+    setOpen(uploadError !== null);
+  }, [uploadError]);
 
   const onAlertClose = (event) => {
-    dispatch(setSongError(null))
+    dispatch(setUploadError(null))
     setOpen(false);
+  }
+
+  const resetAudioFile = () => {
+    dispatch(setSongSrc(null));
+    dispatch(setSongCurrentTime(null));
+    dispatch(setSongDuration(null));
+    dispatch(setSongDuration(null));
+  }
+
+  const onLoadAudioFile = (event) => {
+    let audioDuration = audioRef.current.duration;
+    if (audioDuration < lrcDuration) {
+      resetAudioFile();
+      dispatch(setUploadError(`Audio file (${audioDuration}) is shorter than LRC indicates (${lrcDuration}).`));
+    }
+    else {
+      dispatch(setSongDuration(audioDuration));
+      dispatch(setSongCurrentTime(audioRef.current.currentTime));
+      dispatch(setSongSeekValue(audioRef.current.seekValue));
+    }
   }
 
   return (
@@ -69,19 +100,20 @@ export default function Holder() {
                     severity="error"
                     className={classes.alertBox}
                   >
-                    {songError}
+                    {uploadError}
                   </Alert>
                 </Collapse>
                 <Grid container direction='row' wrap='nowrap' spacing={2}>
                   <Grid item>
-                    <audio ref={audioRef} hidden></audio>
+                    <audio ref={audioRef} onLoadedMetadata={onLoadAudioFile} hidden></audio>
                     <UploadButtons audioRef={audioRef}/>
                   </Grid>
                   <Grid item>
-                    <AudioProgress audioRef={audioRef}/>
+                    <AudioProgress/>
                   </Grid>
                 </Grid>
                 <Typography variant='h4' className={classes.paddedHeader}>Lyric Window</Typography>
+                <NowPlaying/>
                 <LyricWindow/>
               </CardContent>
             </Card>

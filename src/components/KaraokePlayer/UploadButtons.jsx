@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { setSong } from './songSlice';
-import { setSongError } from './songErrorSlice';
+import { setSong, setSongSrc } from './songSlice';
+import { setUploadError } from './uploadErrorSlice';
 import { parseLrcFile } from '../../js/lrcFileParser';
 import { ButtonGroup, Button, Slider, FormGroup } from '@material-ui/core';
 import AttachFileRoundedIcon from '@material-ui/icons/AttachFileRounded';
@@ -39,9 +39,8 @@ const useStyles = makeStyles((theme) => ({
 export default function UploadButtons(props) {
   const classes = useStyles();
   const song = useSelector((state) => state.song.value);
-  const audioSrc = props.audioRef.current !== undefined ? props.audioRef.current.src : ''
   const dispatch = useDispatch();
-  const controlButtonsDisabled = song === null || audioSrc === '';
+  const controlButtonsDisabled = song.karaoke === null || song.src === null;
   const [lrcKey, setLrcKey] = useState(Date.now());
   const [audioKey, setAudioKey] = useState(Date.now());
 
@@ -49,7 +48,7 @@ export default function UploadButtons(props) {
     const files = event.target.files;
 
     if (files.length === 0) {
-      dispatch(setSongError('File upload failed!'));
+      dispatch(setUploadError('File upload failed!'));
     }
     else {
       const file = files[0];
@@ -60,7 +59,7 @@ export default function UploadButtons(props) {
           let parsedSong= parseLrcFile(lrcFileData);
           dispatch(setSong(parsedSong));
         } catch(error) {
-          dispatch(setSongError(error.message));
+          dispatch(setUploadError(error.message));
         }
         setLrcKey(Date.now());
       });
@@ -72,14 +71,14 @@ export default function UploadButtons(props) {
     const files = event.target.files;
 
     if (files.length === 0) {
-      dispatch(setSongError('File upload failed!'));
+      dispatch(setUploadError('File upload failed!'));
     }
     else {
       const file = files[0];
       let audioUrl = URL.createObjectURL(file);
-      props.audioRef.current.src = audioUrl;
+      dispatch(setSongSrc(audioUrl));
     }
-    setLrcKey(Date.now());
+    setAudioKey(Date.now());
   }
 
   return (
@@ -93,7 +92,7 @@ export default function UploadButtons(props) {
           </Button>
           <Button className={classes.uploadButton} component="label"
                   onInput={onAudioUploadInput} endIcon={<MusicNoteRoundedIcon/>}
-                  disabled={song === null}>
+                  disabled={song.karaoke === null}>
             Audio
             <input type="file" hidden key={audioKey} />
           </Button>
