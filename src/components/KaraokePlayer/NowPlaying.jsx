@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
 import { Typography } from '@material-ui/core';
-import '@fontsource/roboto';
 
 export default function NowPlaying() {
   let song = useSelector((state) => state.song.value);
