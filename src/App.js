@@ -3,10 +3,10 @@ import { createTheme } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 import { light, dark, getCachedTheme } from './Themes';
-import Holder from './components/KaraokePlayer/Holder';
 import HeadingBar from './components/HeadingBar';
 import Background from './components/Background';
 import createBackground from './js/webgl';
+import KaraokeHolder from './components/KaraokePlayer/KaraokeHolder';
 
 export default function App() {
   const [isLightTheme, setTheme] = useState(getCachedTheme());
@@ -30,7 +30,7 @@ export default function App() {
       <Router>
         <Switch>
           <Route exact={true} path="/">
-            <Holder/>
+            <KaraokeHolder/>
           </Route>
         </Switch>
       </Router>

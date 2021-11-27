@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Holder() {
+export default function KaraokeHolder() {
   const classes = useStyles();
   const audioRef = useRef();
   const songSrc = useSelector((state) => state.song.value.src);
