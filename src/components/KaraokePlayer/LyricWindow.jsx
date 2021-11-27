@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
   },
   karaokeLine: {
     padding: theme.spacing(1),
+    fontSize: '1.25rem'
   },
   karaokePos: {
     color: 'rgb(221, 190, 11)'
@@ -37,7 +38,7 @@ export default function LyricWindow() {
     <Grid className={classes.karaokeLyricWindow}>
       {lyricWindowContent.map((lyricLine) => {
         return (
-          <Typography key={lyricLine.index} className={classes.karaokeLine} variant='h6'>
+          <Typography key={lyricLine.index} className={classes.karaokeLine} variant='body1'>
             <span className={classes.karaokePos}/><span className='upcoming'>{lyricLine.lyric}</span>
           </Typography>
         )})}
