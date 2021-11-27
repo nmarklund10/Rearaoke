@@ -1,6 +1,7 @@
-import React from 'react';
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { LinearProgress } from '@material-ui/core';
+import { secondsToString } from '../../js/time';
 
 const useStyles = makeStyles((theme) => ({
   audioProgress: {
@@ -17,15 +18,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function AudioProgress(props) {
+export default function AudioProgress() {
   const classes = useStyles();
+  const song = useSelector((state) => state.song.value);
+  const currentTime = song.currentTime === null ? '..' : secondsToString(song.currentTime);
+  const totalTime = song.duration === null ? '..' : secondsToString(song.duration);
+  const songName = song.src === null ? 'No song loaded' : '';
 
   return (
     <>
       <LinearProgress className={classes.audioProgress} variant="determinate" value={100}/>
       <div className={classes.progressText}>
-        <span>.. / ..</span>
-        <span className={classes.audioFileName}>No song loaded</span>
+        <span>{currentTime} / {totalTime}</span>
+        <span className={classes.audioFileName}>{songName}</span>
       </div>
     </>
   );
