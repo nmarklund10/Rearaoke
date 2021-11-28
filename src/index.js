@@ -5,6 +5,7 @@ import './css/index.css';
 import App from './App';
 import store from './store';
 import reportWebVitals from './tests/reportWebVitals';
+import 'typeface-roboto';
 
 ReactDOM.render(
   <React.StrictMode>

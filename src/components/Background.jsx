@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { Box } from '@mui/material'
 
-const useStyles = makeStyles(() => ({
+const classes = {
   bg: {
     position: 'fixed',
     top: '0',
@@ -8,13 +8,11 @@ const useStyles = makeStyles(() => ({
     zIndex: '-10',
     height: '100%',
     width: '100%'
-  },
-}));
+  }
+};
 
 export default function Background() {
-  const classes = useStyles();
-
   return (
-    <canvas id="bg" className={classes.bg}/>
+    <Box component='canvas' id="bg" sx={classes.bg}/>
   );
 }

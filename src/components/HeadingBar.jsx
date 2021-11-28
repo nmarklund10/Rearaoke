@@ -1,17 +1,18 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Brightness3Icon from '@material-ui/icons/Brightness3';
-import Brightness7Icon from '@material-ui/icons/Brightness7';
-import { AppBar, Toolbar, Typography, Button } from '@material-ui/core';
+import Brightness3Icon from '@mui/icons-material/Brightness3';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
+const classes = {
+  headingBar: {
+    backgroundColor: (theme) => theme.palette.primary.main
+  },
   title: {
     flexGrow: 1,
-  },
-}));
+  }
+};
 
 export default function HeadingBar(props) {
-  const classes = useStyles();
   const onTrigger = () => {
       props.parentCallback();
   }
@@ -19,8 +20,8 @@ export default function HeadingBar(props) {
 
   return (
     <AppBar>
-      <Toolbar>
-        <Typography variant="h6" className={classes.title}>
+      <Toolbar sx={classes.headingBar}>
+        <Typography variant="h6" sx={classes.title}>
           Rearaoke
         </Typography>
         <Button color="inherit" aria-label="Change Theme" endIcon={icon} onClick={onTrigger}>
