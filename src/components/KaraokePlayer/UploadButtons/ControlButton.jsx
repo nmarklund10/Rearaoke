@@ -1,21 +1,19 @@
-import { Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
+import { Button } from '@mui/material';
+import { PlayArrowRounded } from '@mui/icons-material';
 
-const useStyles = makeStyles((theme) => ({
+const classes = {
   controlButton: {
     backgroundColor: 'green',
     color: 'white'
-  },
-}));
+  }
+}
 
 export default function ControlButton(props) {
-  const classes = useStyles();
   const disabled = props.disabled;
 
   return (
-    <Button className={classes.controlButton} disabled={disabled}>
-      <PlayArrowRoundedIcon/>
+    <Button sx={classes.controlButton} disabled={disabled}>
+      <PlayArrowRounded/>
     </Button>
   );
 }

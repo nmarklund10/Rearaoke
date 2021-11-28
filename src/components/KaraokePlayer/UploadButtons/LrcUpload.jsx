@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button } from '@material-ui/core';
-import AttachFileRoundedIcon from '@material-ui/icons/AttachFileRounded';
+import { Button } from '@mui/material';
+import { AttachFileRounded } from '@mui/icons-material';
 import { setUploadError } from '../uploadErrorSlice';
 import { parseLrcFile } from '../../../js/lrcFileParser';
 import { setSong } from '../songSlice';
@@ -36,8 +36,8 @@ export default function LrcUpload(props) {
   }
 
   return (
-    <Button className={uploadButtonClass} component="label"
-            onInput={onLrcUploadInput} endIcon={<AttachFileRoundedIcon/>}>
+    <Button sx={uploadButtonClass} component="label"
+            onInput={onLrcUploadInput} endIcon={<AttachFileRounded/>}>
       .LRC
       <input type="file" hidden key={lrcKey}/>
     </Button>

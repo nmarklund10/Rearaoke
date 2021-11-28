@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { ThemeProvider, CssBaseline } from '@material-ui/core';
+import CssBaseline from '@mui/material/CssBaseline';
 import { light, dark, getCachedTheme } from './Themes';
 import HeadingBar from './components/HeadingBar';
 import Background from './components/Background';

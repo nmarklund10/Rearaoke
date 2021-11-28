@@ -1,8 +1,8 @@
-import { blueGrey } from "@material-ui/core/colors";
+import { blueGrey, indigo, grey } from "@mui/material/colors";
 
 export const light = {
   palette: {
-    type: 'light',
+    mode: 'light',
     secondary: {
       main: blueGrey[100]
     }
@@ -11,7 +11,13 @@ export const light = {
 
 export const dark = {
   palette: {
-    type: 'dark',
+    mode: 'dark',
+    primary: {
+      main: indigo[900],
+    },
+    background: {
+      paper: grey[800]
+    },
     secondary: {
       main: blueGrey[300]
     }

@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { ButtonGroup, FormGroup } from '@material-ui/core';
+import { ButtonGroup, FormGroup } from '@mui/material';
 import LrcUpload from './LrcUpload';
 import AudioUpload from './AudioUpload';
 import ControlButton from './ControlButton';
@@ -8,25 +7,24 @@ import ReplayButton from './ReplayButton';
 import VolumeSlider from './VolumeSlider';
 
 
-const useStyles = makeStyles((theme) => ({
+const classes = {
   controls: {
     flexDirection: 'row'
   },
   uploadButton: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: (theme) => theme.palette.primary.main,
     color: 'white'
   }
-}));
+};
 
 export default function UploadButtons(props) {
-  const classes = useStyles();
   const song = useSelector((state) => state.song.value);
   const audioButtonDisabled = song.karaoke === null;
   const controlButtonsDisabled = audioButtonDisabled || song.src === null;
 
   return (
     <>
-      <FormGroup className={classes.controls}>
+      <FormGroup sx={classes.controls}>
         <ButtonGroup disableElevation={true} variant="contained">
           <LrcUpload uploadButtonClass={classes.uploadButton}/>
           <AudioUpload uploadButtonClass={classes.uploadButton} disabled={audioButtonDisabled}/>

@@ -1,7 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Card, CardContent, Typography, } from '@material-ui/core';
+import { Paper, Grid, Card, CardContent, Typography, } from '@mui/material';
 import { setSongDuration, setSongCurrentTime, setSongSeekValue, setSongSrc } from './songSlice';
 import { setUploadError } from './uploadErrorSlice';
 import NowPlaying from './NowPlaying';
@@ -10,7 +9,7 @@ import AudioProgress from './AudioProgress';
 import LyricWindow from './LyricWindow';
 import UploadButtons from './UploadButtons/UploadButtons';
 
-const useStyles = makeStyles((theme) => ({
+const classes = {
   karaokeContainer: {
     height: '100%'
   },
@@ -18,13 +17,12 @@ const useStyles = makeStyles((theme) => ({
     zIndex: '10',
   },
   paddedHeader: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2)
+    paddingTop: (theme) => theme.spacing(2),
+    paddingBottom: (theme) => theme.spacing(2)
   }
-}));
+};
 
 export default function KaraokeHolder() {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const audioRef = useRef();
   const songSrc = useSelector((state) => state.song.value.src);
@@ -60,14 +58,14 @@ export default function KaraokeHolder() {
 
   return (
     <>
-      <Grid className={classes.karaokeContainer} container direction='column'
+      <Grid sx={classes.karaokeContainer} container direction='column'
             alignItems='center' justifyContent='center'>
         <Grid item>
-          <Paper variant='outlined' className={classes.karaokeHolder}>
+          <Paper variant='outlined' sx={classes.karaokeHolder}>
             <Card>
               <CardContent>
                 <Typography variant='h3' align='center'>Rearaoke</Typography>
-                <Typography variant='h4' className={classes.paddedHeader}>Audio Control</Typography>
+                <Typography variant='h4' sx={classes.paddedHeader}>Audio Control</Typography>
                 <UploadError />
                 <Grid container direction='row' wrap='nowrap' spacing={2}>
                   <Grid item>
@@ -78,7 +76,7 @@ export default function KaraokeHolder() {
                     <AudioProgress/>
                   </Grid>
                 </Grid>
-                <Typography variant='h4' className={classes.paddedHeader}>Lyric Window</Typography>
+                <Typography variant='h4' sx={classes.paddedHeader}>Lyric Window</Typography>
                 <NowPlaying/>
                 <LyricWindow/>
               </CardContent>

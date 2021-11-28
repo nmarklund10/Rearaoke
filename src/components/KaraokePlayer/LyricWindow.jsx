@@ -1,26 +1,27 @@
 import { useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Box } from '@mui/material';
 
-const useStyles = makeStyles((theme) => ({
+const classes = {
   karaokeLyricWindow: {
     height: '100%',
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    margin: (theme) => theme.spacing(1),
+    backgroundColor: (theme) => theme.palette.secondary.main,
   },
   karaokeLine: {
-    padding: theme.spacing(1),
+    padding: (theme) => theme.spacing(1),
     fontSize: '1.25rem'
   },
   karaokePos: {
     color: 'rgb(221, 190, 11)'
+  },
+  upcoming: {
+
   }
-}));
+};
 
 export default function LyricWindow() {
   const MAX_LINES = 4;
   const PLACEHOLDER = {start: -1, end: -1};
-  const classes = useStyles();
   const songKaraoke = useSelector((state) => state.song.value.karaoke);
   const songCurrentTime = useSelector((state) => state.song.value.currentTime);
   let lyricWindowContent = [{...PLACEHOLDER, index: -1, lyric: 'No lyrics to display'},
@@ -35,11 +36,12 @@ export default function LyricWindow() {
   }
 
   return (
-    <Grid className={classes.karaokeLyricWindow}>
+    <Grid sx={classes.karaokeLyricWindow}>
       {lyricWindowContent.map((lyricLine) => {
         return (
-          <Typography key={lyricLine.index} className={classes.karaokeLine} variant='body1'>
-            <span className={classes.karaokePos}/><span className='upcoming'>{lyricLine.lyric}</span>
+          <Typography key={lyricLine.index} sx={classes.karaokeLine} variant='body1'>
+            <Box component='span' sx={classes.karaokePos}/>
+            <Box component='span' className={classes.upcoming}>{lyricLine.lyric}</Box>
           </Typography>
         )})}
     </Grid>

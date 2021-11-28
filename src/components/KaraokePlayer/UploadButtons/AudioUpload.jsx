@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button } from '@material-ui/core';
-import MusicNoteRoundedIcon from '@material-ui/icons/MusicNoteRounded';
+import { Button } from '@mui/material';
+import { MusicNoteRounded } from '@mui/icons-material';
 import { setUploadError } from '../uploadErrorSlice';
 import { setSongSrc } from '../songSlice';
 
@@ -26,8 +26,8 @@ export default function AudioUpload(props) {
   }
 
   return (
-    <Button className={uploadButtonClass} component="label"
-            onInput={onAudioUploadInput} endIcon={<MusicNoteRoundedIcon/>}
+    <Button sx={uploadButtonClass} component="label"
+            onInput={onAudioUploadInput} endIcon={<MusicNoteRounded/>}
             disabled={disabled}>
       Audio
       <input type="file" hidden key={audioKey} />

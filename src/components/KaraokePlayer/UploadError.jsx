@@ -1,20 +1,18 @@
 import { useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { Collapse, IconButton } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
-import CloseIcon from '@material-ui/icons/Close';
+import { Collapse, IconButton } from '@mui/material';
+import { Alert } from '@mui/material';
+import { Close } from '@mui/icons-material';
 import { setUploadError } from './uploadErrorSlice';
 
-const useStyles = makeStyles((theme) => ({
+const classes = {
   alertBox: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1)
+    marginTop: (theme) => theme.spacing(1),
+    marginBottom: (theme) => theme.spacing(1)
   }
-}));
+};
 
 export default function UploadError() {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const uploadError = useSelector((state) => state.uploadError.value);
   const [open, setOpen] = useState(uploadError !== null);
@@ -38,11 +36,11 @@ export default function UploadError() {
             size="small"
             onClick={onAlertClose}
           >
-            <CloseIcon fontSize="inherit" />
+            <Close fontSize="inherit" />
           </IconButton>
         }
         severity="error"
-        className={classes.alertBox}
+        sx={classes.alertBox}
       >
         {uploadError}
       </Alert>
