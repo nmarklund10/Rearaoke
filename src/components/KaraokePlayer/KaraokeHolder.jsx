@@ -1,13 +1,10 @@
-import { useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Paper, Grid, Card, CardContent, Typography, } from '@mui/material';
-import { setSongDuration, setSongCurrentTime, setSongSeekValue, setSongSrc } from './songSlice';
-import { setUploadError } from './uploadErrorSlice';
 import NowPlaying from './NowPlaying';
 import UploadError from './UploadError';
 import AudioProgress from './AudioProgress';
 import LyricWindow from './LyricWindow';
 import UploadButtons from './UploadButtons/UploadButtons';
+import Audio from './Audio';
 
 const classes = {
   karaokeContainer: {
@@ -23,39 +20,6 @@ const classes = {
 };
 
 export default function KaraokeHolder() {
-  const dispatch = useDispatch();
-  const audioRef = useRef();
-  const songSrc = useSelector((state) => state.song.value.src);
-  const songKaraoke = useSelector((state) => state.song.value.karaoke);
-
-  if (songKaraoke !== null) {
-    var lrcDuration = songKaraoke[songKaraoke.length - 1].end;
-  }
-
-  useEffect(() => {
-    audioRef.current.src = songSrc;
-  }, [songSrc]);
-
-  const resetAudioFile = () => {
-    dispatch(setSongSrc(null));
-    dispatch(setSongCurrentTime(null));
-    dispatch(setSongDuration(null));
-    dispatch(setSongDuration(null));
-  }
-
-  const onLoadAudioFile = (event) => {
-    let audioDuration = audioRef.current.duration;
-    if (audioDuration < lrcDuration) {
-      resetAudioFile();
-      dispatch(setUploadError(`Audio file (${audioDuration}) is shorter than LRC indicates (${lrcDuration}).`));
-    }
-    else {
-      dispatch(setSongDuration(audioDuration));
-      dispatch(setSongCurrentTime(audioRef.current.currentTime));
-      dispatch(setSongSeekValue(0));
-    }
-  }
-
   return (
     <>
       <Grid sx={classes.karaokeContainer} container direction='column'
@@ -69,8 +33,8 @@ export default function KaraokeHolder() {
                 <UploadError />
                 <Grid container direction='row' wrap='nowrap' spacing={2}>
                   <Grid item>
-                    <audio ref={audioRef} onLoadedMetadata={onLoadAudioFile} hidden></audio>
-                    <UploadButtons audioRef={audioRef}/>
+                    <Audio/>
+                    <UploadButtons/>
                   </Grid>
                   <Grid item>
                     <AudioProgress/>
