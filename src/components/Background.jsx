@@ -7,7 +7,8 @@ const classes = {
     bottom: '0',
     zIndex: '-10',
     height: '100%',
-    width: '100%'
+    width: '100%',
+    backgroundColor: (theme) => theme.palette.secondary.main
   }
 };
 
