@@ -17,10 +17,11 @@ const classes = {
   }
 };
 
-export default function UploadButtons(props) {
-  const song = useSelector((state) => state.song.value);
-  const audioButtonDisabled = song.karaoke === null;
-  const controlButtonsDisabled = audioButtonDisabled || song.src === null;
+export default function UploadButtons() {
+  const karaoke = useSelector((state) => state.song.value.karaoke);
+  const src = useSelector((state) => state.song.value.src);
+  const audioButtonDisabled = karaoke === null;
+  const controlButtonsDisabled = audioButtonDisabled || src === null;
 
   return (
     <>
@@ -31,7 +32,7 @@ export default function UploadButtons(props) {
           <ControlButton disabled={controlButtonsDisabled}/>
           <ReplayButton disabled={controlButtonsDisabled}/>
         </ButtonGroup>
-        <VolumeSlider audioRef={props.audioRef} disabled={controlButtonsDisabled}/>
+        <VolumeSlider disabled={controlButtonsDisabled}/>
       </FormGroup>
     </>
   );

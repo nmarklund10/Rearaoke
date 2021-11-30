@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Slider } from '@mui/material';
 import { VolumeUpRounded, VolumeDownRounded } from '@mui/icons-material';
+import { setSongVolume } from '../songSlice';
 
 const classes = {
   volumeSlider: {
@@ -11,22 +12,20 @@ const classes = {
 };
 
 export default function VolumeSlider(props) {
-  const disabled = props.disabled;
-  const audioRef = props.audioRef.current === undefined ? {volume: 1} : props.audioRef.current
-  const [volume, setVolume] = useState(100);
-
-  audioRef.volume = volume / 100;
+  const dispatch = useDispatch();
+  let volume = useSelector((state) => state.song.value.volume);
+  volume = volume !== null ? Math.round(volume * 100) : 100;
 
   const onVolumechange = (event, newVolume) => {
-    setVolume(newVolume);
+    dispatch(setSongVolume(newVolume / 100));
   }
 
   return (
     <>
       <VolumeDownRounded/>
         <Slider sx={classes.volumeSlider} aria-label="Volume"
-                value={volume}  valueLabelDisplay="auto" onChange={onVolumechange}
-                disabled={disabled}/>
+                value={volume}  valueLabelDisplay="auto"
+                onChange={onVolumechange} disabled={props.disabled}/>
       <VolumeUpRounded/>
     </>
   );

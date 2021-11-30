@@ -7,8 +7,7 @@ const classes = {
     color: (theme) => theme.palette.primary.main,
     width: '40vw',
     height: (theme) =>theme.spacing(1),
-    borderRadius: (theme) => theme.spacing(3),
-    cursor: 'pointer'
+    borderRadius: (theme) => theme.spacing(3)
   },
   audioFileStatus: {
     float: 'right'
@@ -19,17 +18,20 @@ const classes = {
 };
 
 export default function AudioProgress() {
-  const song = useSelector((state) => state.song.value);
-  const seekValue = song.seekValue === null ? 0 : song.seekValue;
-  const currentTime = song.currentTime === null ? '..' : secondsToString(song.currentTime);
-  const totalTime = song.duration === null ? '..' : secondsToString(song.duration);
-  const resetAudioFileleStatus = song.src === null ? 'No song loaded' : '';
+  const currentTime = useSelector((state) => state.song.value.currentTime);
+  const duration = useSelector((state) => state.song.value.duration);
+  const src = useSelector((state) => state.song.value.src);
+
+  const time = currentTime === null ? '..' : secondsToString(currentTime);
+  const totalTime = duration === null ? '..' : secondsToString(duration);
+  const resetAudioFileleStatus = src === null ? 'No song loaded' : '';
+  const progress = duration === null ? 0 : (currentTime / duration) * 100;
 
   return (
     <>
-      <LinearProgress sx={classes.audioProgress} variant="determinate" value={seekValue}/>
+      <LinearProgress sx={classes.audioProgress} variant="determinate" value={progress}/>
       <Box component='div' sx={classes.progressText}>
-        <span>{currentTime} / {totalTime}</span>
+        <span>{time} / {totalTime}</span>
         <Box component='span' sx={classes.audioFileStatus}>{resetAudioFileleStatus}</Box>
       </Box>
     </>

@@ -23,12 +23,12 @@ export default function LyricWindow() {
   const MAX_LINES = 4;
   const PLACEHOLDER = {start: -1, end: -1};
   const songKaraoke = useSelector((state) => state.song.value.karaoke);
-  const songCurrentTime = useSelector((state) => state.song.value.currentTime);
+  const currentTime = useSelector((state) => state.song.value.currentTime);
   let lyricWindowContent = [{...PLACEHOLDER, index: -1, lyric: 'No lyrics to display'},
                             {...PLACEHOLDER, index: -2, lyric: 'Upload an LRC file and audio file to get started'}];
 
 
-  if (songKaraoke !== null && songCurrentTime === 0) {
+  if (songKaraoke !== null && currentTime === 0) {
     const initialSlice = Math.min(songKaraoke.length, MAX_LINES);
     lyricWindowContent = songKaraoke.slice(0, initialSlice).map((lyricLine) => {
       return lyricLine;

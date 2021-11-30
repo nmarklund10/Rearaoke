@@ -2,17 +2,18 @@ import { useSelector } from 'react-redux';
 import { Typography } from '@mui/material';
 
 export default function NowPlaying() {
-  let song = useSelector((state) => state.song.value);
-  const showNowPlaying = song.title !== null;
+  const title = useSelector((state) => state.song.value.title);
+  let artist = useSelector((state) => state.song.value.artist);
+  const showNowPlaying = title !== null;
   let nowPlaying = <></>;
 
   if (showNowPlaying) {
-    const songTitle = song.title !== '' ? song.title : 'Unnamed Song';
-    if (song.artist !== null && song.artist !== '') {
+    const songTitle = title !== '' ? title : 'Unnamed Song';
+    if (artist !== null && artist !== '') {
       var songArtist =
         <>
           <span> by </span>
-          <b>{song.artist}</b>
+          <b>{artist}</b>
         </>;
     }
     nowPlaying =
