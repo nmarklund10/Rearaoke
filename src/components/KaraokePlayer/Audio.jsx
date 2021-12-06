@@ -1,7 +1,8 @@
 import { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSongDuration, setSongCurrentTime, resetAudioValues,
-         setSongSrc, initializeAudioValues, setSongSeekValue } from './songSlice';
+         setSongSrc, initializeAudioValues, setSongSeekValue,
+         setSongPlaying } from './songSlice';
 import { setUploadError } from './uploadErrorSlice';
 
 export default function Audio() {
@@ -37,7 +38,13 @@ export default function Audio() {
   }, [volume]);
 
   const updateSongCurrentTime = () => {
-    dispatch(setSongCurrentTime(audioRef.current.currentTime));
+    let newCurrentTime = audioRef.current.currentTime;
+    dispatch(setSongCurrentTime(newCurrentTime));
+  }
+
+  const restartSong = () => {
+    dispatch(setSongPlaying(null));
+    dispatch(setSongSeekValue(0));
   }
 
   const onLoadAudioFile = (event) => {
@@ -55,6 +62,7 @@ export default function Audio() {
 
   return (
     <audio ref={audioRef} onLoadedMetadata={onLoadAudioFile}
-           onTimeUpdate={updateSongCurrentTime} hidden/>
+           onTimeUpdate={updateSongCurrentTime} onEnded={restartSong}
+           hidden/>
   );
 }
