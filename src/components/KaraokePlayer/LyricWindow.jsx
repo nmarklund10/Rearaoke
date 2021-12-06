@@ -1,49 +1,106 @@
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Grid, Typography, Box } from '@mui/material';
 
 const classes = {
   karaokeLyricWindow: {
     height: '100%',
+    minHeight: '5em',
     margin: (theme) => theme.spacing(1),
     backgroundColor: (theme) => theme.palette.secondary.main,
   },
   karaokeLine: {
     padding: (theme) => theme.spacing(1),
-    fontSize: '1.25rem'
+    minHeight: '1rem'
+  },
+  animatedLine: {
+    fontWeight: 'bold'
   },
   karaokePos: {
-    color: 'rgb(221, 190, 11)'
+    color: (theme) => theme.palette.primary.main,
   },
-  upcoming: {
-
+  unAnimatedLine: {
+    fontSize: '1.25rem'
   }
 };
 
 export default function LyricWindow() {
   const MAX_LINES = 4;
+  const START_ANIMATION_TIME = 0.25
   const PLACEHOLDER = {start: -1, end: -1};
-  const songKaraoke = useSelector((state) => state.song.value.karaoke);
+  const karaoke = useSelector((state) => state.song.value.karaoke);
+  const src = useSelector((state) => state.song.value.src);
   const currentTime = useSelector((state) => state.song.value.currentTime);
-  let lyricWindowContent = [{...PLACEHOLDER, index: -1, lyric: 'No lyrics to display'},
-                            {...PLACEHOLDER, index: -2, lyric: 'Upload an LRC file and audio file to get started'}];
+  const [nextKaraokeIndex, setNextKaraokeIndex] = useState(0);
+  const [letterIndex, setLetterIndex] = useState(0);
+  const [lineIsAnimating, setLineIsAnimating] = useState(false);
+  const [lyricWindowContent, setLyricWindowContent] = useState(
+    [{...PLACEHOLDER, lyric: 'No lyrics to display'},
+    {...PLACEHOLDER, lyric: 'Upload an LRC file and audio file to get started'}]
+  );
 
+  useEffect(() => {
+    if (currentTime === 0) {
+      setNextKaraokeIndex(0);
+      setLetterIndex(0);
+      setLineIsAnimating(false);
+    }
+    else if (karaoke !== null && nextKaraokeIndex !== null &&
+             nextKaraokeIndex < karaoke.length) {
+      let nextKaraokeLine = karaoke[nextKaraokeIndex];
+      if (nextKaraokeLine.start - currentTime <= START_ANIMATION_TIME) {
+        setLineIsAnimating(true);
+        let currentLetterIndex = letterIndex;
+        let letterTime = nextKaraokeLine.letters[currentLetterIndex];
+        while (letterTime - currentTime <= START_ANIMATION_TIME) {
+          currentLetterIndex += 1;
+          letterTime = nextKaraokeLine.letters[currentLetterIndex];
+        }
+        setLetterIndex(currentLetterIndex);
+      }
+      if (nextKaraokeLine.end - currentTime < 0) {
+        setNextKaraokeIndex(nextKaraokeIndex + 1);
+        setLetterIndex(0);
+        setLineIsAnimating(false);
+      }
+    }
+  }, [currentTime, nextKaraokeIndex, karaoke, lineIsAnimating, letterIndex]);
 
-  if (songKaraoke !== null && currentTime === 0) {
-    const initialSlice = Math.min(songKaraoke.length, MAX_LINES);
-    lyricWindowContent = songKaraoke.slice(0, initialSlice).map((lyricLine) => {
-      return lyricLine;
-    });
+  useEffect(() => {
+    if (karaoke !== null && src !== null) {
+      const endSlice = nextKaraokeIndex + Math.min(karaoke.length - nextKaraokeIndex, MAX_LINES);
+      setLyricWindowContent(karaoke.slice(nextKaraokeIndex, endSlice));
+    }
+  }, [karaoke, src, nextKaraokeIndex]);
+
+  const animatedLine = (lyric, index) => {
+    let highlightedText = lyric.slice(0, letterIndex);
+    let unHighlightedText = lyric.slice(letterIndex);
+    return (
+      <Typography key={index} sx={classes.karaokeLine} variant={'h5'}>
+        <Box component='div' sx={classes.animatedLine}>
+          <Box component='span' sx={classes.karaokePos}>{highlightedText}</Box>
+          <Box component='span'>{unHighlightedText}</Box>
+        </Box>
+      </Typography>
+    );
+  }
+
+  const unAnimatedLine = (lyric, index) => {
+    return (
+      <Typography key={index} sx={classes.karaokeLine} variant={'body1'}>
+        <Box component='span' sx={classes.unAnimatedLine}>{lyric}</Box>
+      </Typography>
+    );
   }
 
   return (
     <Grid sx={classes.karaokeLyricWindow}>
-      {lyricWindowContent.map((lyricLine) => {
-        return (
-          <Typography key={lyricLine.index} sx={classes.karaokeLine} variant='body1'>
-            <Box component='span' sx={classes.karaokePos}/>
-            <Box component='span' className={classes.upcoming}>{lyricLine.lyric}</Box>
-          </Typography>
-        )})}
+      {lyricWindowContent.map((lyricLine, index) => {
+        return (lineIsAnimating && index === 0) ?
+               animatedLine(lyricLine.lyric, index) :
+               unAnimatedLine(lyricLine.lyric, index);
+      })}
     </Grid>
   );
 }
