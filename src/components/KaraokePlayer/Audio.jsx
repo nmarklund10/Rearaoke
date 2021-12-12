@@ -2,7 +2,8 @@ import { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSongDuration, setSongCurrentTime, resetAudioValues,
          setSongSrc, initializeAudioValues, setSongSeekValue,
-         setSongPlaying } from './songSlice';
+         setSongPlaying, setSongKaraoke } from './songSlice';
+import { calculateLetterTimes } from '../../js/lrcFileParser';
 import { setUploadError } from './uploadErrorSlice';
 
 export default function Audio() {
@@ -47,6 +48,17 @@ export default function Audio() {
     dispatch(setSongSeekValue(0));
   }
 
+  const updateLastKaraokeEnd = (audioDuration) => {
+    let newKaraoke = [...karaoke]
+    let lastKaraoke = newKaraoke[karaoke.length - 1]
+    newKaraoke[karaoke.length - 1] = {
+      ...lastKaraoke,
+      letters: calculateLetterTimes(lastKaraoke.start, lastKaraoke.lyric, audioDuration),
+      end: audioDuration
+    }
+    dispatch(setSongKaraoke(newKaraoke));
+  }
+
   const onLoadAudioFile = (event) => {
     const lrcDuration = karaoke[karaoke.length - 1].end;
     const audioDuration = audioRef.current.duration;
@@ -57,6 +69,9 @@ export default function Audio() {
     else {
       dispatch(setSongDuration(audioDuration));
       dispatch(initializeAudioValues());
+      if (lrcDuration === 0) {
+        updateLastKaraokeEnd(audioDuration);
+      }
     }
   }
 
