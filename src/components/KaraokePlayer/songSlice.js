@@ -82,6 +82,15 @@ export const songSlice = createSlice({
         }
       }
     },
+    setSongKaraoke: (state, action) => {
+      return {
+        ...state,
+        value: {
+          ...state.value,
+          karaoke: action.payload
+        }
+      }
+    },
     resetAudioValues: (state, action) => {
       return {
         ...state,
@@ -119,6 +128,7 @@ export const songSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const { setSong, setSongSrc, setSongDuration, setSongCurrentTime,
                setSongSeekValue, setSongPlaying, resetAudioValues,
-               setSongVolume, resetSong, initializeAudioValues } = songSlice.actions
+               setSongVolume, resetSong, initializeAudioValues,
+               setSongKaraoke } = songSlice.actions
 
 export default songSlice.reducer

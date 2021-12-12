@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid, Typography, Box, Checkbox, FormControlLabel } from '@mui/material';
 
 const classes = {
   karaokeLyricWindow: {
@@ -27,19 +27,38 @@ const classes = {
 export default function LyricWindow() {
   const MAX_LINES = 4;
   const START_ANIMATION_TIME = 0.25
-  const PLACEHOLDER = {start: -1, end: -1};
   const karaoke = useSelector((state) => state.song.value.karaoke);
   const src = useSelector((state) => state.song.value.src);
   const currentTime = useSelector((state) => state.song.value.currentTime);
+  const [showCheckbox, setShowCheckbox] = useState(false);
+  const [showLineProgress, setShowLineProgress] = useState(true);
   const [nextKaraokeIndex, setNextKaraokeIndex] = useState(0);
   const [letterIndex, setLetterIndex] = useState(0);
   const [lineIsAnimating, setLineIsAnimating] = useState(false);
-  const [lyricWindowContent, setLyricWindowContent] = useState(
-    [{...PLACEHOLDER, lyric: 'No lyrics to display'},
-    {...PLACEHOLDER, lyric: 'Upload an LRC file and audio file to get started'}]
-  );
+  const DEFAULT_LYRIC_CONTENT = useMemo(() => {
+    const PLACEHOLDER = {start: -1, end: -1};
+    return [{...PLACEHOLDER, lyric: 'No lyrics to display'},
+            {...PLACEHOLDER, lyric: 'Upload an LRC file and audio file to get started'}]
+  }, []);
+
+  const [lyricWindowContent, setLyricWindowContent] = useState(DEFAULT_LYRIC_CONTENT);
 
   useEffect(() => {
+    const updateLetterIndex = (letters) => {
+      let currentLetterIndex = letterIndex;
+      if (showLineProgress) {
+        let letterTime = letters[currentLetterIndex];
+        while (letterTime - currentTime <= START_ANIMATION_TIME) {
+          currentLetterIndex += 1;
+          letterTime = letters[currentLetterIndex];
+        }
+      }
+      else {
+        currentLetterIndex = letters.length;
+      }
+      setLetterIndex(currentLetterIndex);
+    }
+
     if (currentTime === 0) {
       setNextKaraokeIndex(0);
       setLetterIndex(0);
@@ -50,13 +69,7 @@ export default function LyricWindow() {
       let nextKaraokeLine = karaoke[nextKaraokeIndex];
       if (nextKaraokeLine.start - currentTime <= START_ANIMATION_TIME) {
         setLineIsAnimating(true);
-        let currentLetterIndex = letterIndex;
-        let letterTime = nextKaraokeLine.letters[currentLetterIndex];
-        while (letterTime - currentTime <= START_ANIMATION_TIME) {
-          currentLetterIndex += 1;
-          letterTime = nextKaraokeLine.letters[currentLetterIndex];
-        }
-        setLetterIndex(currentLetterIndex);
+        updateLetterIndex(nextKaraokeLine.letters);
       }
       if (nextKaraokeLine.end - currentTime < 0) {
         setNextKaraokeIndex(nextKaraokeIndex + 1);
@@ -64,14 +77,19 @@ export default function LyricWindow() {
         setLineIsAnimating(false);
       }
     }
-  }, [currentTime, nextKaraokeIndex, karaoke, lineIsAnimating, letterIndex]);
+  }, [currentTime, nextKaraokeIndex, karaoke, lineIsAnimating, letterIndex, showLineProgress]);
 
   useEffect(() => {
     if (karaoke !== null && src !== null) {
       const endSlice = nextKaraokeIndex + Math.min(karaoke.length - nextKaraokeIndex, MAX_LINES);
       setLyricWindowContent(karaoke.slice(nextKaraokeIndex, endSlice));
+      setShowCheckbox(true);
     }
-  }, [karaoke, src, nextKaraokeIndex]);
+    else {
+      setLyricWindowContent(DEFAULT_LYRIC_CONTENT);
+      setShowCheckbox(false);
+    }
+  }, [karaoke, src, nextKaraokeIndex, DEFAULT_LYRIC_CONTENT]);
 
   const animatedLine = (lyric, index) => {
     let highlightedText = lyric.slice(0, letterIndex);
@@ -94,13 +112,26 @@ export default function LyricWindow() {
     );
   }
 
+  const toggleShowLineProgress = () => {
+    setShowLineProgress(!showLineProgress);
+  }
+
   return (
-    <Grid sx={classes.karaokeLyricWindow}>
-      {lyricWindowContent.map((lyricLine, index) => {
-        return (lineIsAnimating && index === 0) ?
-               animatedLine(lyricLine.lyric, index) :
-               unAnimatedLine(lyricLine.lyric, index);
-      })}
-    </Grid>
+    <>
+      <FormControlLabel
+        label="Show line progress"
+        control={<Checkbox label="Show line progress"
+                           checked={showLineProgress}
+                           onClick={toggleShowLineProgress}/>}
+        sx={{display: showCheckbox ? 'visible' : 'none'}}
+      />
+      <Grid sx={classes.karaokeLyricWindow}>
+        {lyricWindowContent.map((lyricLine, index) => {
+          return (lineIsAnimating && index === 0) ?
+                animatedLine(lyricLine.lyric, index) :
+                unAnimatedLine(lyricLine.lyric, index);
+        })}
+      </Grid>
+    </>
   );
 }

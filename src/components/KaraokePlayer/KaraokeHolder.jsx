@@ -1,4 +1,4 @@
-import { Paper, Grid, Card, CardContent, Typography, } from '@mui/material';
+import { Paper, Grid, Card, CardContent, Typography, Link } from '@mui/material';
 import NowPlaying from './NowPlaying';
 import UploadError from './UploadError';
 import AudioProgress from './AudioProgress';
@@ -40,6 +40,8 @@ export default function KaraokeHolder() {
                     <AudioProgress/>
                   </Grid>
                 </Grid>
+                <Typography variant='subtitle1'>Find .lrc files <Link rel='noopener noreferrer' target='_blank' href='https://www.lyricsify.com/'>here</Link></Typography>
+                <Typography variant='subtitle1'>Convert Youtube videos to audio <Link rel='noopener noreferrer' target='_blank' href='https://320ytmp3.com/'>here</Link></Typography>
                 <Typography variant='h4' sx={classes.paddedHeader}>Lyric Window</Typography>
                 <NowPlaying/>
                 <LyricWindow/>

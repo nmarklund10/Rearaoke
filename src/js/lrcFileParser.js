@@ -103,7 +103,7 @@ function isTimeStamp(text) {
 function addLyricLine(karaoke, lrcLine) {
   // how long to define a break in a song to display on the karaoke lyrics
   const BREAK_TIME = 4;
-  const BREAK_TEXT = '[break]';
+  const BREAK_TEXT = '....';
   const BREAK_PAD_SECS = 1;
 
   const NUM_LYRICS = karaoke.length;
@@ -112,14 +112,14 @@ function addLyricLine(karaoke, lrcLine) {
   const PLACEHOLDER = 0;
   let previousLyric = (NUM_LYRICS === 0) ? {end: PLACEHOLDER} : karaoke[LAST_KARAOKE_INDEX]
 
-  if (lrcLine.lyric === '') {
+  if (karaoke.length !== 0) {
     previousLyric.end = lrcLine.time;
     if (previousLyric.end <= lrcLine.start) {
       throw new Error(`LRC times not properly sorted at line ${NUM_LYRICS}`);
     }
     previousLyric.letters = calculateLetterTimes(previousLyric.start, previousLyric.lyric, previousLyric.end)
   }
-  else {
+  if (lrcLine.lyric !== '') {
     if ((lrcLine.time - previousLyric.end) >= BREAK_TIME) {
       const start = previousLyric.end + BREAK_PAD_SECS;
       const end = lrcLine.time - BREAK_PAD_SECS;
@@ -139,7 +139,7 @@ function addLyricLine(karaoke, lrcLine) {
   }
 }
 
-function calculateLetterTimes(start, lyric, end) {
+export function calculateLetterTimes(start, lyric, end) {
   const timeInterval = (end - start) / lyric.length;
   return lyric.split('').map((letter, index) => start + (timeInterval * index));
 }

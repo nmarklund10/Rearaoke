@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import { AttachFileRounded } from '@mui/icons-material';
 import { setUploadError } from '../uploadErrorSlice';
 import { parseLrcFile } from '../../../js/lrcFileParser';
-import { setSong } from '../songSlice';
+import { setSong, setSongSrc } from '../songSlice';
 
 
 export default function LrcUpload(props) {
@@ -26,6 +26,7 @@ export default function LrcUpload(props) {
         try {
           let parsedSong= parseLrcFile(lrcFileData);
           dispatch(setSong(parsedSong));
+          dispatch(setSongSrc(null));
         } catch(error) {
           dispatch(setUploadError(error.message));
         }
