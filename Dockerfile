@@ -14,6 +14,7 @@ RUN yarn install
 
 # add app
 COPY . ./
+ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN yarn build
 RUN yarn global add serve
 
