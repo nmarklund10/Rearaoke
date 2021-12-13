@@ -11,6 +11,7 @@ export default function Audio() {
   const audioRef = useRef();
   const src = useSelector((state) => state.song.value.src);
   const karaoke = useSelector((state) => state.song.value.karaoke);
+  const changeEnd = useSelector((state) => state.song.value.changeEnd);
   const songPlaying = useSelector((state) => state.song.value.songPlaying);
   const seekValue = useSelector((state) => state.song.value.seekValue);
   const volume = useSelector((state) => state.song.value.volume);
@@ -62,21 +63,28 @@ export default function Audio() {
   const onLoadAudioFile = (event) => {
     const lrcDuration = karaoke[karaoke.length - 1].end;
     const audioDuration = audioRef.current.duration;
-    if (audioDuration < lrcDuration) {
+    if (!changeEnd && (audioDuration < lrcDuration)) {
       dispatch(setSongSrc(null));
       dispatch(setUploadError(`Audio file (${audioDuration}) is shorter than LRC indicates (${lrcDuration}).`));
     }
     else {
       dispatch(setSongDuration(audioDuration));
       dispatch(initializeAudioValues());
-      if (lrcDuration === 0) {
+      if (changeEnd) {
         updateLastKaraokeEnd(audioDuration);
       }
+      dispatch(setUploadError(null));
+    }
+  }
+
+  const handleError = () => {
+    if (src !== null) {
+      dispatch(setUploadError('Error loading provided audio file'))
     }
   }
 
   return (
-    <audio ref={audioRef} onLoadedMetadata={onLoadAudioFile}
+    <audio ref={audioRef} onLoadedMetadata={onLoadAudioFile} onError={handleError}
            onTimeUpdate={updateSongCurrentTime} onEnded={restartSong}
            hidden/>
   );
