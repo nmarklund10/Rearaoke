@@ -6,7 +6,7 @@ export function parseLrcFile(fileData) {
   let parsedLrcFile = {
     title: '',
     artist: '',
-    karaoke: []
+    karaoke: [],
   }
 
   for (let line of fileLines) {
@@ -26,6 +26,7 @@ export function parseLrcFile(fileData) {
       }
     }
   }
+  parsedLrcFile.changeEnd = (parsedLrcFile.karaoke[parsedLrcFile.karaoke.length - 1].end === 0) ? true : false;
   return parsedLrcFile
 }
 

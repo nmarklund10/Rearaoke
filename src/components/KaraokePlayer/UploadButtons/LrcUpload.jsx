@@ -16,7 +16,7 @@ export default function LrcUpload(props) {
     const files = event.target.files;
 
     if (files.length === 0) {
-      dispatch(setUploadError('File upload failed!'));
+      dispatch(setUploadError('File upload failed'));
     }
     else {
       const file = files[0];
@@ -33,6 +33,7 @@ export default function LrcUpload(props) {
         setLrcKey(Date.now());
       });
       reader.readAsText(file);
+      dispatch(setUploadError(null));
     }
   }
 

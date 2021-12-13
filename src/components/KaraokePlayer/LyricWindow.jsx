@@ -40,7 +40,6 @@ export default function LyricWindow() {
     return [{...PLACEHOLDER, lyric: 'No lyrics to display'},
             {...PLACEHOLDER, lyric: 'Upload an LRC file and audio file to get started'}]
   }, []);
-
   const [lyricWindowContent, setLyricWindowContent] = useState(DEFAULT_LYRIC_CONTENT);
 
   useEffect(() => {

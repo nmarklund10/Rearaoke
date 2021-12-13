@@ -1,7 +1,6 @@
 import { useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Collapse, IconButton } from '@mui/material';
-import { Alert } from '@mui/material';
+import { Collapse, IconButton, Alert } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { setUploadError } from './uploadErrorSlice';
 
@@ -18,7 +17,12 @@ export default function UploadError() {
   const [open, setOpen] = useState(uploadError !== null);
 
   useEffect(() => {
-    setOpen(uploadError !== null);
+    if (uploadError === null) {
+      setOpen(false);
+    }
+    else {
+      setOpen(true);
+    }
   }, [uploadError]);
 
   const onAlertClose = (event) => {

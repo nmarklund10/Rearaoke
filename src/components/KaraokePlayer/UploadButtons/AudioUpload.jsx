@@ -15,7 +15,7 @@ export default function AudioUpload(props) {
     const files = event.target.files;
 
     if (files.length === 0) {
-      dispatch(setUploadError('File upload failed!'));
+      dispatch(setUploadError('File upload failed'));
     }
     else {
       const file = files[0];

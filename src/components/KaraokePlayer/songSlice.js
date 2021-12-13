@@ -10,7 +10,8 @@ const initialState = {
     currentTime: null,
     duration: null,
     songPlaying: null,
-    volume: null
+    volume: null,
+    changeEnd: true
   }
 }
 
