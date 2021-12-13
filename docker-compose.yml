@@ -2,8 +2,8 @@ version: '3.7'
 
 services:
 
-  sample:
-    container_name: sample
+  rearaoke:
+    container_name: rearaoke
     build:
       context: .
       dockerfile: Dockerfile
