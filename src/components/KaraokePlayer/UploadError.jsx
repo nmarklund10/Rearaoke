@@ -18,7 +18,12 @@ export default function UploadError() {
   const [open, setOpen] = useState(uploadError !== null);
 
   useEffect(() => {
-    setOpen(uploadError !== null);
+    if (uploadError === null) {
+      setOpen(false);
+    }
+    else {
+      setOpen(true);
+    }
   }, [uploadError]);
 
   const onAlertClose = (event) => {
