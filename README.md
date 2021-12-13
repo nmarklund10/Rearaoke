@@ -5,6 +5,12 @@ This is a karaoke web application that lets you upload a [.lrc file](https://en.
 ![App Screenshot](docs/images/screenshot.png)
 
 ## Dev Setup
+### Docker
+```
+docker compose build
+docker compose up
+```
+
 ### Install dependencies
 ```
 yarn install
