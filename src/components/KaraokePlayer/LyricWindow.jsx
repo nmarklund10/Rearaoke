@@ -43,6 +43,7 @@ export default function LyricWindow() {
   const [lyricWindowContent, setLyricWindowContent] = useState(DEFAULT_LYRIC_CONTENT);
 
   useEffect(() => {
+    // define in here to prevent re renders
     const updateLetterIndex = (letters) => {
       let currentLetterIndex = letterIndex;
       if (showLineProgress) {
@@ -80,6 +81,7 @@ export default function LyricWindow() {
 
   useEffect(() => {
     if (karaoke !== null && src !== null) {
+      // check if remaining number of karaoke lines is less than MAX_LINES
       const endSlice = nextKaraokeIndex + Math.min(karaoke.length - nextKaraokeIndex, MAX_LINES);
       setLyricWindowContent(karaoke.slice(nextKaraokeIndex, endSlice));
       setShowCheckbox(true);
@@ -112,7 +114,12 @@ export default function LyricWindow() {
   }
 
   const toggleShowLineProgress = () => {
-    setShowLineProgress(!showLineProgress);
+    let newShowLineProgress = !showLineProgress;
+    if (newShowLineProgress) {
+      setLetterIndex(0);
+    }
+
+    setShowLineProgress(newShowLineProgress);
   }
 
   return (
