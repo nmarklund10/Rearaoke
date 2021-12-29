@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import LyricWindow from '../components/KaraokePlayer/LyricWindow';
 import { configureStore } from '@reduxjs/toolkit';
 import songReducer from '../components/KaraokePlayer/songSlice'
