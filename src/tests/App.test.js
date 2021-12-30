@@ -1,8 +1,9 @@
-import { render } from '@testing-library/react';
+import React from 'react';
+import { render, test, expect } from '@testing-library/react';
 import LyricWindow from '../components/KaraokePlayer/LyricWindow';
 import { configureStore } from '@reduxjs/toolkit';
-import songReducer from '../components/KaraokePlayer/songSlice'
-import { Provider } from "react-redux";
+import songReducer from '../components/KaraokePlayer/songSlice';
+import { Provider } from 'react-redux';
 import { readFileSync } from 'fs';
 
 test('check lyric window displays lyrics properly', () => {

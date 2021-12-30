@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { LinearProgress, Box } from '@mui/material';
 import { secondsToString } from '../../js/time';

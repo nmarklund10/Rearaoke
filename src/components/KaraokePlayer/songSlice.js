@@ -13,7 +13,7 @@ const initialState = {
     volume: null,
     changeEnd: true
   }
-}
+};
 
 export const songSlice = createSlice({
   name: 'song',
@@ -26,7 +26,7 @@ export const songSlice = createSlice({
           ...state.value,
           ...action.payload
         }
-      }
+      };
     },
     setSongSrc: (state, action) => {
 
@@ -36,7 +36,7 @@ export const songSlice = createSlice({
           ...state.value,
           src: action.payload
         }
-      }
+      };
     },
     setSongDuration: (state, action) => {
       return {
@@ -45,7 +45,7 @@ export const songSlice = createSlice({
           ...state.value,
           duration: action.payload
         }
-      }
+      };
     },
     setSongCurrentTime: (state, action) => {
       return {
@@ -54,7 +54,7 @@ export const songSlice = createSlice({
           ...state.value,
           currentTime: action.payload
         }
-      }
+      };
     },
     setSongSeekValue: (state, action) => {
       return {
@@ -63,7 +63,7 @@ export const songSlice = createSlice({
           ...state.value,
           seekValue: action.payload
         }
-      }
+      };
     },
     setSongPlaying: (state, action) => {
       return {
@@ -72,7 +72,7 @@ export const songSlice = createSlice({
           ...state.value,
           songPlaying: action.payload
         }
-      }
+      };
     },
     setSongVolume: (state, action) => {
       return {
@@ -81,7 +81,7 @@ export const songSlice = createSlice({
           ...state.value,
           volume: action.payload
         }
-      }
+      };
     },
     setSongKaraoke: (state, action) => {
       return {
@@ -90,9 +90,9 @@ export const songSlice = createSlice({
           ...state.value,
           karaoke: action.payload
         }
-      }
+      };
     },
-    resetAudioValues: (state, action) => {
+    resetAudioValues: (state) => {
       return {
         ...state,
         value: {
@@ -102,9 +102,9 @@ export const songSlice = createSlice({
           karaoke: state.value.karaoke,
           src: state.value.src
         }
-      }
+      };
     },
-    initializeAudioValues: (state, action) => {
+    initializeAudioValues: (state) => {
       return {
         ...state,
         value: {
@@ -113,23 +113,23 @@ export const songSlice = createSlice({
           currentTime: 0,
           volume: 1
         }
-      }
+      };
     },
-    resetSong: (state, action) => {
+    resetSong: (state) => {
       return {
         ...state,
         value: {
           ...initialState.value
         }
-      }
+      };
     }
   },
-})
+});
 
 // Action creators are generated for each case reducer function
 export const { setSong, setSongSrc, setSongDuration, setSongCurrentTime,
-               setSongSeekValue, setSongPlaying, resetAudioValues,
-               setSongVolume, resetSong, initializeAudioValues,
-               setSongKaraoke } = songSlice.actions
+  setSongSeekValue, setSongPlaying, resetAudioValues,
+  setSongVolume, resetSong, initializeAudioValues,
+  setSongKaraoke } = songSlice.actions;
 
-export default songSlice.reducer
+export default songSlice.reducer;

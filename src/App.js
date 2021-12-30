@@ -1,11 +1,10 @@
-import { useState/*, useEffect*/ } from 'react';
+import React, { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import { light, dark, getCachedTheme } from './Themes';
 import HeadingBar from './components/HeadingBar';
 import Background from './components/Background';
-// import createBackground from './js/webgl';
 import KaraokeHolder from './components/KaraokePlayer/KaraokeHolder';
 
 export default function App() {
@@ -14,13 +13,9 @@ export default function App() {
 
   const handleCallback = () => {
     setTheme(!isLightTheme);
-    setAppliedTheme(createTheme(!isLightTheme ? light : dark))
+    setAppliedTheme(createTheme(!isLightTheme ? light : dark));
     localStorage.setItem('theme', !isLightTheme);
-  }
-
-  // useEffect(() => {
-  //   createBackground(appliedTheme.palette.secondary.main);
-  // }, [appliedTheme]);
+  };
 
   return (
     <ThemeProvider theme={appliedTheme}>

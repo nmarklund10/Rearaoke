@@ -1,3 +1,4 @@
+import React from 'react';
 import { Paper, Grid, Card, CardContent, Typography, Link } from '@mui/material';
 import NowPlaying from './NowPlaying';
 import UploadError from './UploadError';
@@ -23,7 +24,7 @@ export default function KaraokeHolder() {
   return (
     <>
       <Grid sx={classes.karaokeContainer} container direction='column'
-            alignItems='center' justifyContent='center'>
+        alignItems='center' justifyContent='center'>
         <Grid item>
           <Paper variant='outlined' sx={classes.karaokeHolder}>
             <Card>
