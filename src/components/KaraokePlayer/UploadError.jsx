@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react';
+import React, { useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Collapse, IconButton, Alert } from '@mui/material';
 import { Close } from '@mui/icons-material';
@@ -25,10 +25,10 @@ export default function UploadError() {
     }
   }, [uploadError]);
 
-  const onAlertClose = (event) => {
-    dispatch(setUploadError(null))
+  const onAlertClose = () => {
+    dispatch(setUploadError(null));
     setOpen(false);
-  }
+  };
 
   return (
     <Collapse in={open}>

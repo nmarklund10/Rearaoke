@@ -1,8 +1,8 @@
-import { useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSongDuration, setSongCurrentTime, resetAudioValues,
-         setSongSrc, initializeAudioValues, setSongSeekValue,
-         setSongPlaying, setSongKaraoke } from './songSlice';
+  setSongSrc, initializeAudioValues, setSongSeekValue,
+  setSongPlaying, setSongKaraoke } from './songSlice';
 import { calculateLetterTimes } from '../../js/lrcFileParser';
 import { setUploadError } from './uploadErrorSlice';
 
@@ -42,25 +42,25 @@ export default function Audio() {
   const updateSongCurrentTime = () => {
     let newCurrentTime = audioRef.current.currentTime;
     dispatch(setSongCurrentTime(newCurrentTime));
-  }
+  };
 
   const restartSong = () => {
     dispatch(setSongPlaying(null));
     dispatch(setSongSeekValue(0));
-  }
+  };
 
   const updateLastKaraokeEnd = (audioDuration) => {
-    let newKaraoke = [...karaoke]
-    let lastKaraoke = newKaraoke[karaoke.length - 1]
+    let newKaraoke = [...karaoke];
+    let lastKaraoke = newKaraoke[karaoke.length - 1];
     newKaraoke[karaoke.length - 1] = {
       ...lastKaraoke,
       letters: calculateLetterTimes(lastKaraoke.start, lastKaraoke.lyric, audioDuration),
       end: audioDuration
-    }
+    };
     dispatch(setSongKaraoke(newKaraoke));
-  }
+  };
 
-  const onLoadAudioFile = (event) => {
+  const onLoadAudioFile = () => {
     const lrcDuration = karaoke[karaoke.length - 1].end;
     const audioDuration = audioRef.current.duration;
     if (!changeEnd && (audioDuration < lrcDuration)) {
@@ -75,17 +75,17 @@ export default function Audio() {
       }
       dispatch(setUploadError(null));
     }
-  }
+  };
 
   const handleError = () => {
     if (src !== null) {
-      dispatch(setUploadError('Error loading provided audio file'))
+      dispatch(setUploadError('Error loading provided audio file'));
     }
-  }
+  };
 
   return (
     <audio ref={audioRef} onLoadedMetadata={onLoadAudioFile} onError={handleError}
-           onTimeUpdate={updateSongCurrentTime} onEnded={restartSong}
-           hidden/>
+      onTimeUpdate={updateSongCurrentTime} onEnded={restartSong}
+      hidden/>
   );
 }

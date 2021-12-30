@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
 import { MusicNoteRounded } from '@mui/icons-material';
 import { setUploadError } from '../uploadErrorSlice';
 import { setSongSrc } from '../songSlice';
+
+AudioUpload.propTypes = {
+  uploadButtonClass: PropTypes.object,
+  disabled: PropTypes.bool
+};
 
 export default function AudioUpload(props) {
   const dispatch = useDispatch();
@@ -23,12 +29,12 @@ export default function AudioUpload(props) {
       dispatch(setSongSrc(audioUrl));
     }
     setAudioKey(Date.now());
-  }
+  };
 
   return (
     <Button sx={uploadButtonClass} component="label"
-            onInput={onAudioUploadInput} endIcon={<MusicNoteRounded/>}
-            disabled={disabled}>
+      onInput={onAudioUploadInput} endIcon={<MusicNoteRounded/>}
+      disabled={disabled}>
       Audio
       <input type="file" hidden key={audioKey} />
     </Button>

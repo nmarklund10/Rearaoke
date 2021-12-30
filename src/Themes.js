@@ -1,4 +1,4 @@
-import { blueGrey, indigo, grey } from "@mui/material/colors";
+import { blueGrey, indigo, grey } from '@mui/material/colors';
 
 export const light = {
   palette: {

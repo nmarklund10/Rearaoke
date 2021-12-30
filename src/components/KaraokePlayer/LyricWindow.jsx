@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Grid, Typography, Box, Checkbox, FormControlLabel } from '@mui/material';
 
@@ -26,7 +26,7 @@ const classes = {
 
 export default function LyricWindow() {
   const MAX_LINES = 4;
-  const START_ANIMATION_TIME = 0.25
+  const START_ANIMATION_TIME = 0.25;
   const karaoke = useSelector((state) => state.song.value.karaoke);
   const src = useSelector((state) => state.song.value.src);
   const currentTime = useSelector((state) => state.song.value.currentTime);
@@ -38,7 +38,7 @@ export default function LyricWindow() {
   const DEFAULT_LYRIC_CONTENT = useMemo(() => {
     const PLACEHOLDER = {start: -1, end: -1};
     return [{...PLACEHOLDER, lyric: 'No lyrics to display'},
-            {...PLACEHOLDER, lyric: 'Upload an LRC file and audio file to get started'}]
+      {...PLACEHOLDER, lyric: 'Upload an LRC file and audio file to get started'}];
   }, []);
   const [lyricWindowContent, setLyricWindowContent] = useState(DEFAULT_LYRIC_CONTENT);
 
@@ -57,7 +57,7 @@ export default function LyricWindow() {
         currentLetterIndex = letters.length;
       }
       setLetterIndex(currentLetterIndex);
-    }
+    };
 
     if (currentTime === 0) {
       setNextKaraokeIndex(0);
@@ -103,7 +103,7 @@ export default function LyricWindow() {
         </Box>
       </Typography>
     );
-  }
+  };
 
   const unAnimatedLine = (lyric, index) => {
     return (
@@ -111,7 +111,7 @@ export default function LyricWindow() {
         <Box component='span' sx={classes.unAnimatedLine}>{lyric}</Box>
       </Typography>
     );
-  }
+  };
 
   const toggleShowLineProgress = () => {
     let newShowLineProgress = !showLineProgress;
@@ -120,22 +120,22 @@ export default function LyricWindow() {
     }
 
     setShowLineProgress(newShowLineProgress);
-  }
+  };
 
   return (
     <>
       <FormControlLabel
         label="Show line progress"
         control={<Checkbox label="Show line progress"
-                           checked={showLineProgress}
-                           onClick={toggleShowLineProgress}/>}
+          checked={showLineProgress}
+          onClick={toggleShowLineProgress}/>}
         sx={{display: showCheckbox ? 'visible' : 'none'}}
       />
       <Grid sx={classes.karaokeLyricWindow}>
         {lyricWindowContent.map((lyricLine, index) => {
           return (lineIsAnimating && index === 0) ?
-                animatedLine(lyricLine.lyric, index) :
-                unAnimatedLine(lyricLine.lyric, index);
+            animatedLine(lyricLine.lyric, index) :
+            unAnimatedLine(lyricLine.lyric, index);
         })}
       </Grid>
     </>

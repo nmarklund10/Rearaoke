@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
 import { ReplayRounded } from '@mui/icons-material';
@@ -13,17 +15,21 @@ const classes = {
   }
 };
 
+ReplayButton.propTypes = {
+  disabled: PropTypes.bool
+};
+
 export default function ReplayButton(props) {
   const dispatch = useDispatch();
 
   const replaySong = () => {
     dispatch(setSongPlaying(false));
     dispatch(setSongSeekValue(0));
-  }
+  };
 
   return (
     <Button sx={classes.replayButton} disableRipple={true}
-            onClick={replaySong} disabled={props.disabled}>
+      onClick={replaySong} disabled={props.disabled}>
       <ReplayRounded/>
     </Button>
   );

@@ -1,4 +1,5 @@
-import { Box } from '@mui/material'
+import React from 'react';
+import { Box } from '@mui/material';
 
 const classes = {
   bg: {
@@ -14,6 +15,6 @@ const classes = {
 
 export default function Background() {
   return (
-    <Box component='canvas' id="bg" sx={classes.bg}/>
+    <Box component='canvas' id='bg' sx={classes.bg}/>
   );
 }

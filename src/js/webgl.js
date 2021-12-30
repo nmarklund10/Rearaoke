@@ -12,7 +12,7 @@ export default async function createBackground(backgroundColor) {
   // keyModels[2].position.set(7 * (canvas.width / 8), canvas.height / 4, 0);
   // keyModels[3].position.set(7 * (canvas.width / 8), 3 * (canvas.height / 4), 0);
   for (const [, note] of keyModels.entries()) {
-    note.rotation.x += 1.5
+    note.rotation.x += 1.5;
     // note.position.set(canvas.width / 8, canvas.height / 4, 0)
     scene.add(note);
   }
@@ -25,7 +25,7 @@ export default async function createBackground(backgroundColor) {
 
 function setupThreeJs(canvas, backgroundColor) {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(backgroundColor)
+  scene.background = new THREE.Color(backgroundColor);
 
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -42,7 +42,7 @@ function setupThreeJs(canvas, backgroundColor) {
 }
 
 async function createNotes() {
-    // instantiate a loader
+  // instantiate a loader
   const loader = new OBJLoader();
 
   const keyData = await loader.loadAsync(keys_obj);

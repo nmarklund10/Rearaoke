@@ -10,12 +10,12 @@ export const uploadErrorSlice = createSlice({
       return {
         ...state,
         value: action.payload
-      }
+      };
     },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { setUploadError } = uploadErrorSlice.actions
+export const { setUploadError } = uploadErrorSlice.actions;
 
-export default uploadErrorSlice.reducer
+export default uploadErrorSlice.reducer;
