@@ -57,15 +57,17 @@ jobs:
       - run:
           name: build docker image
           command: |
-            docker build -t nmarklund10/rearaoke:${CIRCLE_WORKFLOW_ID:0:7} .
+            docker build -t $DOCKER_USER/rearaoke:${CIRCLE_WORKFLOW_ID:0:7} .
 
       - run:
           name: deploy docker image
-          command: docker push company/app:${CIRCLE_WORKFLOW_ID:0:7}
+          command: docker push $DOCKER_USER/rearaoke:${CIRCLE_WORKFLOW_ID:0:7}
 
 workflows:
   my_workflow:
     jobs:
       - build
-      - lint
-      - update-docker
+      - lint:
+          requires: [build]
+      - update-docker:
+          requires: [lint]
