@@ -12,6 +12,11 @@ commands:
       - run:
           name: Install Dependencies
           command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+  update-kubeconfig:
+    steps:
+      - run:
+          name: get kubeconfig for eks cluster
+          command: aws eks update-kubeconfig --region us-east-1 --name rearaoke
 
 jobs:
   build:
@@ -79,15 +84,47 @@ jobs:
           name: deploy docker image
           command: docker push $DOCKER_USER/rearaoke:${CIRCLE_WORKFLOW_ID:0:7}
 
+  create-eks-cluster:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: install jq
+          command: |
+            sudo apt update
+            sudo apt install jq
+      - run:
+          name: install kubectl
+          command: |
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+      - run:
+          name: install ecktl
+          command: |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
+      - run:
+          name: create cluster if it does not exist # TODO: replace dockertag with circle workflow
+          working_directory: eks
+          command: |
+            sed -i "s|<TAG>|${DOCKER_TAG}|" blue.yml
+            sed -i "s|<TAG>|${DOCKER_TAG}|" green.yml
+            sed -i "s|<TARGET>|blue|" load-balancer.yml
+            (aws eks list-clusters | jq .clusters[0] | grep rearaoke) || \
+            (eksctl create cluster -f eks/cluster.yml && kubectl apply -f blue.yml && kubectl apply -f green.yml && kubectl apply -f load-balancer.yml)
+
 workflows:
   my_workflow:
     jobs:
       # - build
-      - lint #:
-          # requires: [build]
-      - update-docker:
-          requires: [lint]
+      # - lint:
+      #     requires: [build]
+      # - update-docker:
+          # requires: [lint]
           # filters:
           #     branches:
           #       only:
           #         - main
+      - create-eks-cluster #:
+          # requires: [update-docker]
