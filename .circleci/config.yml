@@ -35,7 +35,7 @@ jobs:
       - run:
           name: install hadolint
           command: |
-            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64
+            sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64
             sudo chmod +x /bin/hadolint
       - run:
           name: Install Dependencies
@@ -68,9 +68,9 @@ jobs:
 workflows:
   my_workflow:
     jobs:
-      - build
-      - lint:
-          requires: [build]
+      # - build
+      - lint #:
+          # requires: [build]
       - update-docker:
           requires: [lint]
           # filters:
