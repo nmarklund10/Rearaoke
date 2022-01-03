@@ -15,7 +15,9 @@ jobs:
           command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn --audit
       - run:
           name: Audit packages
-          command: yarn audit --level critical
+          command: |
+            yarn add improved-yarn-audit
+            yarn run improved-yarn-audit --exclude GHSA-4fjc-8q3h-8r69
       - save_cache:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
