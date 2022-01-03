@@ -1,18 +1,26 @@
 version: 2.1
 
+commands:
+  restore-yarn:
+    steps:
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+  install-yarn:
+    steps:
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+
 jobs:
   build:
     docker:
       - image: cimg/node:17.3.0
     steps:
       - checkout
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - yarn-packages-{{ checksum "yarn.lock" }}
-      - run:
-          name: Install Dependencies
-          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+      - restore-yarn
+      - install-yarn
       - run:
           name: Audit packages
           command: |
@@ -28,24 +36,30 @@ jobs:
       - image: cimg/node:17.3.0
     steps:
       - checkout
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - yarn-packages-{{ checksum "yarn.lock" }}
+      - restore-yarn
+      - install-yarn
       - run:
           name: install hadolint
           command: |
             sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64
             sudo chmod +x /bin/hadolint
       - run:
-          name: Install Dependencies
-          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
-      - run:
           name: lint dockerfile
           command: hadolint Dockerfile
       - run:
           name: lint javascript
           command: yarn lint
+
+  test:
+    docker:
+      - image: cimg/node:17.3.0
+    steps:
+      - checkout
+      - restore-yarn
+      - install-yarn
+      - run:
+          name: run tests
+          command: yarn test-once
 
   update-docker:
     machine: true
