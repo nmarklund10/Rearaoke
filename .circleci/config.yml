@@ -12,7 +12,7 @@ jobs:
             - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
-          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn --audit
       - run:
           name: Audit packages
           command: yarn audit --level critical
@@ -71,3 +71,7 @@ workflows:
           requires: [build]
       - update-docker:
           requires: [lint]
+          # filters:
+          #     branches:
+          #       only:
+          #         - main
