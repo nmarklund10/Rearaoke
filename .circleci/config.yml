@@ -1,0 +1,73 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/node
+    steps:
+      - checkout
+        - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+      - run:
+          name: Audit packages
+          command: yarn audit --level critical
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+  lint:
+    docker:
+      - image: cimg/node
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: install hadolint
+          command: |
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64
+            sudo chmod +x /bin/hadolint
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+      - run:
+          name: lint dockerfile
+          command: hadolint Dockerfile
+      - run:
+          name: lint javascript
+          command: yarn lint
+
+  update-docker:
+    docker:
+      - image: cimg/node
+    steps:
+      - checkout
+         machine: true
+      - run:
+          name: login to docker
+          command: |
+            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+
+      - run:
+          name: build docker image
+          command: |
+            docker build -t nmarklund10/rearaoke:${CIRCLE_WORKFLOW_ID:0:7} .
+
+      - run:
+          name: deploy docker image
+          command: docker push company/app:${CIRCLE_WORKFLOW_ID:0:7}
+
+workflows:
+  my_workflow:
+    jobs:
+      - build
+      - lint
+      - update-docker
