@@ -48,9 +48,9 @@ jobs:
   update-docker:
     docker:
       - image: cimg/node
+    machine: true
     steps:
       - checkout
-         machine: true
       - run:
           name: login to docker
           command: |
