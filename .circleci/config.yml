@@ -46,8 +46,6 @@ jobs:
           command: yarn lint
 
   update-docker:
-    docker:
-      - image: cimg/node
     machine: true
     steps:
       - checkout
