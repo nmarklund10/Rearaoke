@@ -90,10 +90,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install jq
+          name: install jq, tar, and gzip
           command: |
             yum update
-            yum install -y jq
+            yum install -y jq tar gzip
       - run:
           name: install kubectl
           command: |
