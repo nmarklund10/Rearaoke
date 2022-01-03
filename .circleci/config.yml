@@ -93,7 +93,7 @@ jobs:
           name: install jq
           command: |
             yum update
-            yum install jq
+            yum install -y jq
       - run:
           name: install kubectl
           command: |
