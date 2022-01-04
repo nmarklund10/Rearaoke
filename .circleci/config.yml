@@ -112,7 +112,19 @@ jobs:
             sed -i "s|<TAG>|${DOCKER_TAG}|" green.yml
             sed -i "s|<TARGET>|blue|" load-balancer.yml
             (aws eks list-clusters | jq .clusters[0] | grep rearaoke) || \
-            (eksctl create cluster -f cluster.yml && kubectl apply -f blue.yml && kubectl apply -f green.yml && kubectl apply -f load-balancer.yml)
+            (eksctl create cluster -f cluster.yml && kubectl apply -f blue.yml && kubectl apply -f load-balancer.yml)
+
+  deploy-green:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+
+  smoke-test:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
 
 workflows:
   my_workflow:

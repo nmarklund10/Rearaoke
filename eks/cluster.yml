@@ -8,9 +8,9 @@ metadata:
 nodeGroups:
   - name: blue
     instanceType: t2.micro
-    desiredCapacity: 10
+    desiredCapacity: 1
     volumeSize: 20
   - name: green
     instanceType: t2.micro
-    desiredCapacity: 10
+    desiredCapacity: 1
     volumeSize: 20
