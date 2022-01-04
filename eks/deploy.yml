@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: blue-rearaoke-deployment
+  name: <ID>-rearaoke-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: blue
+      app: <ID>
   template:
     metadata:
       labels:
-        app: blue
+        app: <ID>
     spec:
       containers:
       - name: rearaoke
@@ -18,5 +18,3 @@ spec:
         ports:
         - containerPort: 3000
         imagePullPolicy: Always
-      strategy:
-        type: Recreate
