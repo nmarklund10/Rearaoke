@@ -249,10 +249,9 @@ jobs:
             sed -i "s|<ID>|$(cat old_workflow.txt)|" backup-blue-load-balancer.yml
             kubectl apply -f backup-blue-load-balancer.yml
       - destroy-environment
-      - save_cache:
-          name: Old Blue deployment ID
+      - persist_to_workspace:
+          root: .
           paths: [old_workflow.txt]
-          key: oldworkflow
 
   cleanup:
     docker:
@@ -262,8 +261,8 @@ jobs:
       - install-tar-gzip
       - install-kubectl
       - get-kubeconfig
-      - restore_cache:
-          keys: [oldworkflow]
+      - attach_workspace:
+          at: .
       - run:
           name: Remove old deploys and load balancers
           command: |
