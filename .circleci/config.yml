@@ -226,6 +226,7 @@ jobs:
       - checkout
       - install-tar-gzip
       - install-kubectl
+      - get-kubeconfig
       - run:
           name: get old workflow id
           command: kubectl describe svc blue-load-balancer | grep Selector | awk '{print $2}' | awk -F '=' '{print $2}' > old_workflow.txt
@@ -261,6 +262,7 @@ jobs:
       - checkout
       - install-tar-gzip
       - install-kubectl
+      - get-kubeconfig
       - restore_cache:
           keys: [oldworkflow]
       - run:
@@ -285,11 +287,11 @@ workflows:
           #         - main
       # - create-eks-cluster #:
           # requires: [update-docker]
-      - deploy-green #:
+      # - deploy-green #:
           # requires: [create-eks-cluster]
-      - smoke-test:
-          requires: [deploy-green]
-      - migrate-green-to-blue:
-          requires: [smoke-test]
+      # - smoke-test:
+          # requires: [deploy-green]
+      - migrate-green-to-blue #:
+          # requires: [smoke-test]
       - cleanup:
           requires: [migrate-green-to-blue]
