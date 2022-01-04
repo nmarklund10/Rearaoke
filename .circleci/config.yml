@@ -143,7 +143,7 @@ jobs:
             mv /tmp/eksctl /usr/local/bin
       - replace-string:
           replace: <TAG>
-          input: ${DOCKER_TAG} # TODO: replace dockertag with circle workflow
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
           file: eks/deploy.yml
       - replace-string:
           replace: <ID>
@@ -182,7 +182,7 @@ jobs:
       - install-kubectl
       - replace-string:
           replace: <TAG>
-          input: ${DOCKER_TAG} # TODO: replace dockertag with circle workflow
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
           file: eks/deploy.yml
       - replace-string:
           replace: <ID>
@@ -237,7 +237,7 @@ jobs:
             cp blue-load-balancer.yml backup-blue-load-balancer.yml
       - replace-string:
           replace: <ID>
-          input: adf30f9 # TODO: add this back ${CIRCLE_WORKFLOW_ID:0:7}
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
           file: eks/blue-load-balancer.yml
       - run:
           name: migrate green to blue
@@ -250,7 +250,7 @@ jobs:
           command: |
             sed -i "s|<ID>|$(cat old_workflow.txt)|" backup-blue-load-balancer.yml
             kubectl apply -f backup-blue-load-balancer.yml
-      # - destroy-environment TODO: uncomment this
+      - destroy-environment
       - save_cache:
           name: Old Blue deployment ID
           paths: [old_workflow.txt]
@@ -267,7 +267,7 @@ jobs:
       - restore_cache:
           keys: [oldworkflow]
       - run:
-          name: Remove old stacks and files
+          name: Remove old deploys and load balancers
           command: |
             OldWorkflowID=$(cat old_workflow.txt)
             echo $OldWorkflowID
@@ -277,22 +277,24 @@ jobs:
 workflows:
   my_workflow:
     jobs:
-      # - build
-      # - lint:
-      #     requires: [build]
-      # - update-docker:
-          # requires: [lint]
-          # filters:
-          #     branches:
-          #       only:
-          #         - main
-      # - create-eks-cluster #:
-          # requires: [update-docker]
-      # - deploy-green #:
-          # requires: [create-eks-cluster]
-      # - smoke-test:
-          # requires: [deploy-green]
-      - migrate-green-to-blue #:
-          # requires: [smoke-test]
+      - build
+      - lint:
+          requires: [build]
+      - test:
+          requires: [build]
+      - update-docker:
+          requires: [lint, test]
+          filters:
+              branches:
+                only:
+                  - main
+      - create-eks-cluster:
+          requires: [update-docker]
+      - deploy-green:
+          requires: [create-eks-cluster]
+      - smoke-test:
+          requires: [deploy-green]
+      - migrate-green-to-blue:
+          requires: [smoke-test]
       - cleanup:
           requires: [migrate-green-to-blue]
