@@ -23,6 +23,14 @@
     "typeface-roboto": "^1.1.13",
     "web-vitals": "^1.0.1"
   },
+  "resolutions": {
+    "immer": "^9.0.6",
+    "glob-parent": "^5.1.2",
+    "ansi-regex": "^5.0.1",
+    "nth-check": "^2.0.1",
+    "browserslist": "^4.16.5"
+
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

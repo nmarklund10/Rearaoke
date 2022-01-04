@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:latest
+FROM node:17
 
 # set working directory
 WORKDIR /app
@@ -10,13 +10,12 @@ ENV PATH /app/node_modules/.bin:$PATH
 # install app dependencies
 COPY package.json ./
 COPY yarn.lock ./
-RUN yarn install
+RUN yarn install && yarn cache clean
 
 # add app
 COPY . ./
 ENV NODE_OPTIONS=--openssl-legacy-provider
-RUN yarn build
-RUN yarn global add serve
+RUN yarn build && yarn global add serve
 
 # start app
 CMD ["serve", "-s", "build"]

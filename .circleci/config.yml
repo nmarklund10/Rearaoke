@@ -1,0 +1,296 @@
+version: 2.1
+
+commands:
+  restore-yarn:
+    steps:
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+  install-yarn:
+    steps:
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+  replace-string:
+    parameters:
+      replace:
+        type: string
+      input:
+        type: string
+      file:
+        type: string
+    steps:
+      - run:
+          name: replace << parameters.replace >> with << parameters.input >> in << parameters.file >>
+          command: sed -i "s|<< parameters.replace >>|<< parameters.input >>|" << parameters.file >>
+  get-kubeconfig:
+    steps:
+      - run:
+          name: get kubeconfig to get kubectl to work
+          command: aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name rearaoke
+  install-tar-gzip:
+    description: install tar and gzip in amazon/aws-cli docker image
+    steps:
+      - run:
+          name: Install tar utility
+          command: |
+            yum update
+            yum install -y tar gzip
+  install-kubectl:
+    description: install kubectl
+    steps:
+      - run:
+          name: install kubectl
+          command: |
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+  destroy-environment:
+    description: Destroy kubernetes cluster
+    steps:
+      - run:
+          name: delete green load balancer
+          when: on_fail
+          command: kubectl delete svc green-load-balancer --wait
+      - run:
+          name: delete green deployment
+          when: on_fail
+          command: kubectl delete deploy ${CIRCLE_WORKFLOW_ID:0:7}-rearaoke-deployment --wait
+
+jobs:
+  build:
+    docker:
+      - image: cimg/node:17.3.0
+    steps:
+      - checkout
+      - restore-yarn
+      - install-yarn
+      - run:
+          name: Audit packages
+          command: |
+            yarn add improved-yarn-audit
+            yarn run improved-yarn-audit --exclude GHSA-whgm-jr23-g3j9
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths: [~/.cache/yarn]
+  lint:
+    docker:
+      - image: cimg/node:17.3.0
+    steps:
+      - checkout
+      - restore-yarn
+      - install-yarn
+      - run:
+          name: install hadolint
+          command: |
+            sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64
+            sudo chmod +x /bin/hadolint
+      - run:
+          name: lint dockerfile
+          command: hadolint Dockerfile
+      - run:
+          name: lint javascript
+          command: yarn lint
+
+  test:
+    docker:
+      - image: cimg/node:17.3.0
+    steps:
+      - checkout
+      - restore-yarn
+      - install-yarn
+      - run:
+          name: run tests
+          command: yarn test-once
+
+  update-docker:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: login to docker
+          command: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run:
+          name: build docker image
+          command: docker build -t $DOCKER_USER/rearaoke:${CIRCLE_WORKFLOW_ID:0:7} .
+      - run:
+          name: deploy docker image
+          command: docker push $DOCKER_USER/rearaoke:${CIRCLE_WORKFLOW_ID:0:7}
+
+  create-eks-cluster:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - install-tar-gzip
+      - run:
+          name: install jq
+          command: yum install -y jq
+      - install-kubectl
+      - run:
+          name: install ecktl
+          command: |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            mv /tmp/eksctl /usr/local/bin
+      - replace-string:
+          replace: <TAG>
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
+          file: eks/deploy.yml
+      - replace-string:
+          replace: <ID>
+          input: blue
+          file: eks/deploy.yml
+      - replace-string:
+          replace: <ID>
+          input: blue
+          file: eks/blue-load-balancer.yml
+      - replace-string:
+          replace: <REGION>
+          input: ${AWS_DEFAULT_REGION}
+          file: eks/cluster.yml
+      - run:
+          name: create cluster if it does not exist
+          working_directory: eks
+          command: |
+            (aws eks list-clusters | jq .clusters[0] | grep rearaoke) || \
+            (eksctl create cluster -f cluster.yml && kubectl apply -f deploy.yml --wait && kubectl apply -f blue-load-balancer.yml)
+      - run:
+          name: get kubeconfig if creation fails
+          when: on_fail
+          command: aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name rearaoke
+      - run:
+          name: delete load balancer if creation fails
+          when: on_fail
+          command: kubectl delete svc blue-load-balancer --wait
+      - run:
+          name: delete blue deploy if creation fails
+          when: on_fail
+          command: kubectl delete deploy blue-rearaoke-deployment --wait
+      - run:
+          name: delete cluster if creation fails
+          when: on_fail
+          command: eksctl delete cluster --region ${AWS_DEFAULT_REGION} --name rearaoke --wait
+
+  deploy-green:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - install-tar-gzip
+      - install-kubectl
+      - replace-string:
+          replace: <TAG>
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
+          file: eks/deploy.yml
+      - replace-string:
+          replace: <ID>
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
+          file: eks/deploy.yml
+      - replace-string:
+          replace: <ID>
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
+          file: eks/green-load-balancer.yml
+      - get-kubeconfig
+      - run:
+          working_directory: eks
+          name: create green deployment
+          command: |
+            kubectl apply -f deploy.yml --wait
+            kubectl apply -f green-load-balancer.yml --wait
+      - destroy-environment
+
+  smoke-test:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - install-kubectl
+      - get-kubeconfig
+      - run:
+          name: wait for DNS name to come up
+          command: sleep 90
+      - run:
+          name: check to see if green deployment is up
+          command: |
+            URL=$(kubectl describe svc green-load-balancer | grep 'LoadBalancer Ingress' | awk '{print $3}')
+            curl --connect-timeout 10 http://$URL:8080 | grep rearaoke
+      - destroy-environment
+
+
+  migrate-green-to-blue:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - install-tar-gzip
+      - install-kubectl
+      - get-kubeconfig
+      - run:
+          name: get old workflow id
+          command: kubectl describe svc blue-load-balancer | grep Selector | awk '{print $2}' | awk -F '=' '{print $2}' > old_workflow.txt
+      - run:
+          name: create blue load balancer template backup
+          working_directory: eks
+          command: cp blue-load-balancer.yml backup-blue-load-balancer.yml
+      - replace-string:
+          replace: <ID>
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
+          file: eks/blue-load-balancer.yml
+      - run:
+          name: migrate green to blue
+          working_directory: eks
+          command: kubectl apply -f blue-load-balancer.yml
+      - run:
+          when: on_fail
+          name: rollback deployment if something goes wrong
+          working_directory: eks
+          command: |
+            sed -i "s|<ID>|$(cat old_workflow.txt)|" backup-blue-load-balancer.yml
+            kubectl apply -f backup-blue-load-balancer.yml
+      - destroy-environment
+      - save_cache:
+          name: Old Blue deployment ID
+          paths: [old_workflow.txt]
+          key: oldworkflow
+
+  cleanup:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - install-tar-gzip
+      - install-kubectl
+      - get-kubeconfig
+      - restore_cache:
+          keys: [oldworkflow]
+      - run:
+          name: Remove old deploys and load balancers
+          command: |
+            OldWorkflowID=$(cat old_workflow.txt)
+            kubectl delete svc green-load-balancer
+            kubectl delete deploy ${OldWorkflowID}-rearaoke-deployment
+
+workflows:
+  my_workflow:
+    jobs:
+      - build
+      - lint:
+          requires: [build]
+      - test:
+          requires: [build]
+      - update-docker:
+          requires: [lint, test]
+          filters:
+              branches:
+                only: [main]
+      - create-eks-cluster:
+          requires: [update-docker]
+      - deploy-green:
+          requires: [create-eks-cluster]
+      - smoke-test:
+          requires: [deploy-green]
+      - migrate-green-to-blue:
+          requires: [smoke-test]
+      - cleanup:
+          requires: [migrate-green-to-blue]

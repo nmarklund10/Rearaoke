@@ -1,3 +1,5 @@
+[![nmarklund10](https://circleci.com/gh/nmarklund10/Rearaoke.svg?style=shield)](https://app.circleci.com/pipelines/github/nmarklund10/Rearaoke?filter=all)
+
 # Rearaoke
 
 [Live Website](https://rearaoke.herokuapp.com/)
