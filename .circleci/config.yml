@@ -231,25 +231,26 @@ jobs:
           name: get old workflow id
           command: kubectl describe svc blue-load-balancer | grep Selector | awk '{print $2}' | awk -F '=' '{print $2}' > old_workflow.txt
       - run:
-          name: create blue load balancer template
+          name: create blue load balancer template backup
           working_directory: eks
           command: |
             cp blue-load-balancer.yml backup-blue-load-balancer.yml
       - replace-string:
           replace: <ID>
-          input: ${CIRCLE_WORKFLOW_ID:0:7}
+          input: adf30f9 # TODO: add this back ${CIRCLE_WORKFLOW_ID:0:7}
           file: eks/blue-load-balancer.yml
       - run:
           name: migrate green to blue
           working_directory: eks
-          command: kubectl deploy -f blue-load-balancer.yml
+          command: kubectl apply -f blue-load-balancer.yml
       - run:
           when: on_fail
           name: rollback deployment if something goes wrong
           working_directory: eks
           command: |
             sed -i "s|<ID>|$(cat old_workflow.txt)|" backup-blue-load-balancer.yml
-            kubectl deploy -f backup-blue-load-balancer.yml
+            kubectl apply -f backup-blue-load-balancer.yml
+      # - destroy-environment TODO: uncomment this
       - save_cache:
           name: Old Blue deployment ID
           paths: [old_workflow.txt]
