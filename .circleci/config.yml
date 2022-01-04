@@ -51,13 +51,11 @@ commands:
       - run:
           name: delete green load balancer
           when: on_fail
-          command: |
-            kubectl delete svc green-load-balancer --wait
+          command: kubectl delete svc green-load-balancer --wait
       - run:
           name: delete green deployment
           when: on_fail
-          command: |
-            kubectl delete deploy ${CIRCLE_WORKFLOW_ID:0:7}-rearaoke-deployment --wait
+          command: kubectl delete deploy ${CIRCLE_WORKFLOW_ID:0:7}-rearaoke-deployment --wait
 
 jobs:
   build:
@@ -75,8 +73,7 @@ jobs:
       - save_cache:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
+          paths: [~/.cache/yarn]
   lint:
     docker:
       - image: cimg/node:17.3.0
@@ -113,14 +110,10 @@ jobs:
       - checkout
       - run:
           name: login to docker
-          command: |
-            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-
+          command: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run:
           name: build docker image
-          command: |
-            docker build -t $DOCKER_USER/rearaoke:${CIRCLE_WORKFLOW_ID:0:7} .
-
+          command: docker build -t $DOCKER_USER/rearaoke:${CIRCLE_WORKFLOW_ID:0:7} .
       - run:
           name: deploy docker image
           command: docker push $DOCKER_USER/rearaoke:${CIRCLE_WORKFLOW_ID:0:7}
@@ -133,8 +126,7 @@ jobs:
       - install-tar-gzip
       - run:
           name: install jq
-          command: |
-            yum install -y jq
+          command: yum install -y jq
       - install-kubectl
       - run:
           name: install ecktl
@@ -163,15 +155,22 @@ jobs:
           command: |
             (aws eks list-clusters | jq .clusters[0] | grep rearaoke) || \
             (eksctl create cluster -f cluster.yml && kubectl apply -f deploy.yml --wait && kubectl apply -f blue-load-balancer.yml)
-
       - run:
-          name: delete rearaoke cluster if setup fails
+          name: get kubeconfig if creation fails
           when: on_fail
-          command: |
-            aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name rearaoke
-            kubectl delete svc blue-load-balancer --wait
-            kubectl delete deploy blue-rearaoke-deployment --wait
-            eksctl delete cluster --region ${AWS_DEFAULT_REGION} --name rearaoke --wait
+          command: aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name rearaoke
+      - run:
+          name: delete load balancer if creation fails
+          when: on_fail
+          command: kubectl delete svc blue-load-balancer --wait
+      - run:
+          name: delete blue deploy if creation fails
+          when: on_fail
+          command: kubectl delete deploy blue-rearaoke-deployment --wait
+      - run:
+          name: delete cluster if creation fails
+          when: on_fail
+          command: eksctl delete cluster --region ${AWS_DEFAULT_REGION} --name rearaoke --wait
 
   deploy-green:
     docker:
@@ -233,8 +232,7 @@ jobs:
       - run:
           name: create blue load balancer template backup
           working_directory: eks
-          command: |
-            cp blue-load-balancer.yml backup-blue-load-balancer.yml
+          command: cp blue-load-balancer.yml backup-blue-load-balancer.yml
       - replace-string:
           replace: <ID>
           input: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -270,7 +268,6 @@ jobs:
           name: Remove old deploys and load balancers
           command: |
             OldWorkflowID=$(cat old_workflow.txt)
-            echo $OldWorkflowID
             kubectl delete svc green-load-balancer
             kubectl delete deploy ${OldWorkflowID}-rearaoke-deployment
 
@@ -286,8 +283,7 @@ workflows:
           requires: [lint, test]
           filters:
               branches:
-                only:
-                  - main
+                only: [main]
       - create-eks-cluster:
           requires: [update-docker]
       - deploy-green:
