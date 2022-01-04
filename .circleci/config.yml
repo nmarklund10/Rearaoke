@@ -17,6 +17,55 @@ commands:
       - run:
           name: get kubeconfig for eks cluster
           command: aws eks update-kubeconfig --region us-east-1 --name rearaoke
+  replace-string:
+    parameters:
+      replace:
+        type: string
+      input:
+        type: string
+      file:
+        type: string
+    steps:
+      - run:
+          name: replace << parameters.replace >> with << parameters.input >> in << parameters.file >>
+          command: sed -i "s|<< parameters.replace >>|<< parameters.input >>|" << parameters.file >>
+  get-kubeconfig:
+    steps:
+      - run:
+          name: get kubeconfig to get kubectl to work
+          command: aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name rearaoke
+  install-tar-gzip:
+    description: install tar and gzip in amazon/aws-cli docker image
+    steps:
+      - run:
+          name: Install tar utility
+          command: |
+            yum update
+            yum install -y tar gzip
+  install-kubectl:
+    description: install kubectl
+    steps:
+      - run:
+          name: install kubectl
+          command: |
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+  destroy-environment:
+    description: Destroy kubernetes cluster
+    steps:
+      - run:
+          name: delete green load balancer
+          when: on_fail
+          command: |
+            kubectl delete svc green-load-balancer --wait
+      - run:
+          name: delete green deployment
+          when: on_fail
+          command: |
+            kubectl delete deploy ${CIRCLE_WORKFLOW_ID:0:7}-rearaoke-deployment --wait
+
+
+
 
 jobs:
   build:
@@ -89,43 +138,133 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - install-tar-gzip
       - run:
-          name: install jq, tar, and gzip
+          name: install jq
           command: |
-            yum update
-            yum install -y jq tar gzip
-      - run:
-          name: install kubectl
-          command: |
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            yum install -y jq
+      - install-kubectl
       - run:
           name: install ecktl
           command: |
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             mv /tmp/eksctl /usr/local/bin
+      - replace-string:
+          replace: <TAG>
+          input: ${DOCKER_TAG} # TODO: replace dockertag with circle workflow
+          file: eks/deploy.yml
+      - replace-string:
+          replace: <ID>
+          input: blue
+          file: eks/deploy.yml
+      - replace-string:
+          replace: <ID>
+          input: blue
+          file: eks/blue-load-balancer.yml
+      - replace-string:
+          replace: <REGION>
+          input: ${AWS_DEFAULT_REGION}
+          file: eks/cluster.yml
       - run:
-          name: create cluster if it does not exist # TODO: replace dockertag with circle workflow
+          name: create cluster if it does not exist
           working_directory: eks
           command: |
-            sed -i "s|<TAG>|${DOCKER_TAG}|" blue.yml
-            sed -i "s|<TAG>|${DOCKER_TAG}|" green.yml
-            sed -i "s|<TARGET>|blue|" load-balancer.yml
-            sed -i "s|<REGION>|${AWS_DEFAULT_REGION}|" cluster.yml
             (aws eks list-clusters | jq .clusters[0] | grep rearaoke) || \
-            (eksctl create cluster -f cluster.yml && kubectl apply -f blue.yml && kubectl apply -f load-balancer.yml)
+            (eksctl create cluster -f cluster.yml && kubectl apply -f deploy.yml --wait && kubectl apply -f blue-load-balancer.yml)
 
   deploy-green:
     docker:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - install-tar-gzip
+      - install-kubectl
+      - replace-string:
+          replace: <TAG>
+          input: ${DOCKER_TAG} # TODO: replace dockertag with circle workflow
+          file: eks/deploy.yml
+      - replace-string:
+          replace: <ID>
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
+          file: eks/deploy.yml
+      - replace-string:
+          replace: <ID>
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
+          file: eks/green-load-balancer.yml
+      - get-kubeconfig
+      - run:
+          working_directory: eks
+          name: create green deployment
+          command: |
+            kubectl apply -f deploy.yml --wait
+            kubectl apply -f green-load-balancer.yml
+      - destroy-environment
 
   smoke-test:
     docker:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - install-kubectl
+      - run:
+          name: check to see if green deployment is up
+          command: |
+            URL=$(kubectl describe svc green-load-balancer | grep 'LoadBalancer Ingress' | awk '{print $3}')
+            curl http://$URL:8080 | grep rearaoke
+      - destroy-environment
+
+
+  migrate-green-to-blue:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - install-tar-gzip
+      - install-kubectl
+      - run:
+          name: get old workflow id
+          command: kubectl describe svc blue-load-balancer | grep Selector | awk '{print $2}' | awk -F '=' '{print $2}' > old_workflow.txt
+      - run:
+          name: create blue load balancer template
+          working_directory: eks
+          command: |
+            cp blue-load-balancer.yml backup-blue-load-balancer.yml
+      - replace-string:
+          replace: <ID>
+          input: ${CIRCLE_WORKFLOW_ID:0:7}
+          file: eks/blue-load-balancer.yml
+      - run:
+          name: migrate green to blue
+          working_directory: eks
+          command: kubectl deploy -f blue-load-balancer.yml
+      - run:
+          when: on_fail
+          name: rollback deployment if something goes wrong
+          working_directory: eks
+          command: |
+            sed -i "s|<ID>|$(cat old_workflow.txt)|" backup-blue-load-balancer.yml
+            kubectl deploy -f backup-blue-load-balancer.yml
+      - save_cache:
+          name: Old Blue deployment ID
+          paths: [old_workflow.txt]
+          key: oldworkflow
+
+  cleanup:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - install-tar-gzip
+      - install-kubectl
+      - restore_cache:
+          keys: [oldworkflow]
+      - run:
+          name: Remove old stacks and files
+          command: |
+            OldWorkflowID=$(cat old_workflow.txt)
+            echo $OldWorkflowID
+            kubectl delete svc green-load-balancer
+            kubectl delete deploy ${OldWorkflowID}-rearaoke-deployment
 
 workflows:
   my_workflow:
@@ -141,3 +280,11 @@ workflows:
           #         - main
       - create-eks-cluster #:
           # requires: [update-docker]
+      # - deploy-green:
+      #     requires: [create-eks-cluster]
+      # - smoke-test:
+      #     requires: [deploy-green]
+      # - migrate-green-to-blue:
+      #     requires: [smoke-test]
+      # - cleanup:
+      #     requires: [migrate-green-to-blue]
