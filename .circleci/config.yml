@@ -12,11 +12,6 @@ commands:
       - run:
           name: Install Dependencies
           command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
-  update-kubeconfig:
-    steps:
-      - run:
-          name: get kubeconfig for eks cluster
-          command: aws eks update-kubeconfig --region us-east-1 --name rearaoke
   replace-string:
     parameters:
       replace:
@@ -63,9 +58,6 @@ commands:
           when: on_fail
           command: |
             kubectl delete deploy ${CIRCLE_WORKFLOW_ID:0:7}-rearaoke-deployment --wait
-
-
-
 
 jobs:
   build:
@@ -172,6 +164,15 @@ jobs:
             (aws eks list-clusters | jq .clusters[0] | grep rearaoke) || \
             (eksctl create cluster -f cluster.yml && kubectl apply -f deploy.yml --wait && kubectl apply -f blue-load-balancer.yml)
 
+      - run:
+          name: delete rearaoke cluster if setup fails
+          when: on_fail
+          command: |
+            aws eks --region ${AWS_DEFAULT_REGION} update-kubeconfig --name rearaoke
+            kubectl delete svc blue-load-balancer --wait
+            kubectl delete deploy blue-rearaoke-deployment --wait
+            eksctl delete cluster --region ${AWS_DEFAULT_REGION} --name rearaoke --wait
+
   deploy-green:
     docker:
       - image: amazon/aws-cli
@@ -206,6 +207,7 @@ jobs:
     steps:
       - checkout
       - install-kubectl
+      - get-kubeconfig
       - run:
           name: check to see if green deployment is up
           command: |
