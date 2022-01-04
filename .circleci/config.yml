@@ -280,8 +280,8 @@ workflows:
           #         - main
       # - create-eks-cluster #:
           # requires: [update-docker]
-      - deploy-green:
-          requires: [create-eks-cluster]
+      - deploy-green #:
+          # requires: [create-eks-cluster]
       - smoke-test:
           requires: [deploy-green]
       - migrate-green-to-blue:
