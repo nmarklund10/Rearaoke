@@ -198,7 +198,7 @@ jobs:
           name: create green deployment
           command: |
             kubectl apply -f deploy.yml --wait
-            kubectl apply -f green-load-balancer.yml
+            kubectl apply -f green-load-balancer.yml --wait
       - destroy-environment
 
   smoke-test:
@@ -212,7 +212,7 @@ jobs:
           name: check to see if green deployment is up
           command: |
             URL=$(kubectl describe svc green-load-balancer | grep 'LoadBalancer Ingress' | awk '{print $3}')
-            curl http://$URL:8080 | grep rearaoke
+            curl http://$URL:443 | grep rearaoke
       - destroy-environment
 
 

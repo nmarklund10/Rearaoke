@@ -6,6 +6,6 @@ spec:
   selector:
     app: <ID>
   ports:
-    - port: 8080
+    - port: 443
       targetPort: 3000
   type: LoadBalancer
