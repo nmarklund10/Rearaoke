@@ -283,13 +283,13 @@ workflows:
           filters:
               branches:
                 only: [main]
-      - create-eks-cluster:
-          requires: [update-docker]
-      - deploy-green:
-          requires: [create-eks-cluster]
-      - smoke-test:
-          requires: [deploy-green]
-      - migrate-green-to-blue:
-          requires: [smoke-test]
-      - cleanup:
-          requires: [migrate-green-to-blue]
+#       - create-eks-cluster:
+#           requires: [update-docker]
+#       - deploy-green:
+#           requires: [create-eks-cluster]
+#       - smoke-test:
+#           requires: [deploy-green]
+#       - migrate-green-to-blue:
+#           requires: [smoke-test]
+#       - cleanup:
+#           requires: [migrate-green-to-blue]
