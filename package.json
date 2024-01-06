@@ -28,7 +28,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "eslint . --fix --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "vite preview --port $PORT"
+    "start": "vite preview --port $PORT --host 0.0.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
