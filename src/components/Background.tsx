@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Theme } from '@mui/material';
 
 const classes = {
   bg: {
@@ -9,12 +8,12 @@ const classes = {
     zIndex: '-10',
     height: '100%',
     width: '100%',
-    backgroundColor: (theme) => theme.palette.secondary.main
+    backgroundColor: (theme: Theme) => theme.palette.secondary.main
   }
 };
 
-export default function Background() {
+export const Background = () => {
   return (
     <Box component='canvas' id='bg' sx={classes.bg}/>
   );
-}
+};

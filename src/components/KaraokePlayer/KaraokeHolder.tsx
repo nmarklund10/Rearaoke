@@ -1,11 +1,10 @@
-import React from 'react';
-import { Paper, Grid, Card, CardContent, Typography, Link } from '@mui/material';
-import NowPlaying from './NowPlaying';
-import UploadError from './UploadError';
-import AudioProgress from './AudioProgress';
-import LyricWindow from './LyricWindow';
-import UploadButtons from './UploadButtons/UploadButtons';
-import Audio from './Audio';
+import { Paper, Grid, Card, CardContent, Typography, Link, Theme } from '@mui/material';
+import { NowPlaying } from './NowPlaying';
+import { UploadError } from './UploadError';
+import { AudioProgress } from './AudioProgress';
+import { LyricWindow } from './LyricWindow';
+import { UploadButtons } from './UploadButtons/UploadButtons';
+import { Audio } from './Audio';
 
 const classes = {
   karaokeContainer: {
@@ -15,12 +14,12 @@ const classes = {
     zIndex: '10',
   },
   paddedHeader: {
-    paddingTop: (theme) => theme.spacing(2),
-    paddingBottom: (theme) => theme.spacing(2)
+    paddingTop: (theme: Theme) => theme.spacing(2),
+    paddingBottom: (theme: Theme) => theme.spacing(2)
   }
 };
 
-export default function KaraokeHolder() {
+export const KaraokeHolder = () => {
   return (
     <>
       <Grid sx={classes.karaokeContainer} container direction='column'
@@ -53,4 +52,4 @@ export default function KaraokeHolder() {
       </Grid>
     </>
   );
-}
+};

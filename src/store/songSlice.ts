@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { SongState } from './store.type';
+import { UNINIT_NUM, UNINIT_STR } from './constants';
 
-const initialState = {
+const initialState: SongState = {
   value: {
-    title: null,
-    artist: null,
-    karaoke: null,
-    src: null,
-    seekValue: null,
-    currentTime: null,
-    duration: null,
+    title: UNINIT_STR,
+    artist: UNINIT_STR,
+    karaoke: [],
+    src: UNINIT_STR,
+    seekValue: UNINIT_NUM,
+    currentTime: UNINIT_NUM,
+    duration: UNINIT_NUM,
     songPlaying: null,
-    volume: null,
+    volume: UNINIT_NUM,
     changeEnd: true
   }
 };
@@ -109,7 +111,6 @@ export const songSlice = createSlice({
         ...state,
         value: {
           ...state.value,
-          seekValue: null,
           currentTime: 0,
           volume: 1
         }

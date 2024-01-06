@@ -1,18 +1,20 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
 import { PlayArrowRounded, Pause } from '@mui/icons-material';
-import { setSongPlaying } from '../songSlice';
+import { setSongPlaying } from '../../../store/songSlice';
+import { RearaokeState } from '../../../store/store.type';
 
-ControlButton.propTypes = {
-  disabled: PropTypes.bool
+const propTypes = {
+  disabled: PropTypes.bool.isRequired
 };
 
-export default function ControlButton(props) {
+type ControlButtonProps = PropTypes.InferProps<typeof propTypes>;
+
+const ControlButton = (props: ControlButtonProps) => {
   const dispatch = useDispatch();
-  let songPlaying = useSelector((state) => state.song.value.songPlaying);
-  songPlaying = songPlaying !== null ? songPlaying : false;
+  let songPlaying = useSelector((state: RearaokeState) => state.song.value.songPlaying);
+  songPlaying = songPlaying != null ? songPlaying : false;
 
   const playSong = () => {
     dispatch(setSongPlaying(true));
@@ -39,4 +41,8 @@ export default function ControlButton(props) {
       {songPlaying ? <Pause/> : <PlayArrowRounded/>}
     </Button>
   );
-}
+};
+
+ControlButton.propTypes = propTypes;
+
+export { ControlButton };
