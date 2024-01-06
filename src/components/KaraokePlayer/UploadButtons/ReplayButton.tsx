@@ -1,9 +1,8 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
 import { ReplayRounded } from '@mui/icons-material';
-import { setSongPlaying, setSongSeekValue } from '../songSlice';
+import { setSongPlaying, setSongSeekValue } from '../../../store/songSlice';
 
 const classes = {
   replayButton: {
@@ -15,11 +14,13 @@ const classes = {
   }
 };
 
-ReplayButton.propTypes = {
-  disabled: PropTypes.bool
+const propTypes = {
+  disabled: PropTypes.bool.isRequired
 };
 
-export default function ReplayButton(props) {
+type ReplayButtonProps = PropTypes.InferProps<typeof propTypes>;
+
+const ReplayButton = (props: ReplayButtonProps) => {
   const dispatch = useDispatch();
 
   const replaySong = () => {
@@ -33,4 +34,8 @@ export default function ReplayButton(props) {
       <ReplayRounded/>
     </Button>
   );
-}
+};
+
+ReplayButton.propTypes = propTypes;
+
+export { ReplayButton };

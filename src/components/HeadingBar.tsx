@@ -1,24 +1,25 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import Brightness3Icon from '@mui/icons-material/Brightness3';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Theme } from '@mui/material';
 
 const classes = {
   headingBar: {
-    backgroundColor: (theme) => theme.palette.primary.main
+    backgroundColor: (theme: Theme) => theme.palette.primary.main
   },
   title: {
     flexGrow: 1,
   }
 };
 
-HeadingBar.propTypes = {
-  parentCallback: PropTypes.func,
-  isLightTheme: PropTypes.bool
+const propTypes = {
+  parentCallback: PropTypes.func.isRequired,
+  isLightTheme: PropTypes.bool.isRequired
 };
 
-export default function HeadingBar(props) {
+type HeadingBarProps = PropTypes.InferProps<typeof propTypes>;
+
+const HeadingBar = (props: HeadingBarProps) => {
   const onTrigger = () => {
     props.parentCallback();
   };
@@ -36,4 +37,8 @@ export default function HeadingBar(props) {
       </Toolbar>
     </AppBar>
   );
-}
+};
+
+HeadingBar.propTypes = propTypes;
+
+export { HeadingBar };

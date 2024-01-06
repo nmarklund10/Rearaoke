@@ -1,19 +1,20 @@
-import React, { useState, useEffect} from 'react';
+import { useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Collapse, IconButton, Alert } from '@mui/material';
+import { Collapse, IconButton, Alert, Theme } from '@mui/material';
 import { Close } from '@mui/icons-material';
-import { setUploadError } from './uploadErrorSlice';
+import { setUploadError } from '../../store/uploadErrorSlice';
+import { RearaokeState } from '../../store/store.type';
 
 const classes = {
   alertBox: {
-    marginTop: (theme) => theme.spacing(1),
-    marginBottom: (theme) => theme.spacing(1)
+    marginTop: (theme: Theme) => theme.spacing(1),
+    marginBottom: (theme: Theme) => theme.spacing(1)
   }
 };
 
-export default function UploadError() {
+export const UploadError = () => {
   const dispatch = useDispatch();
-  const uploadError = useSelector((state) => state.uploadError.value);
+  const uploadError = useSelector((state: RearaokeState) => state.uploadError.value);
   const [open, setOpen] = useState(uploadError !== null);
 
   useEffect(() => {
@@ -50,4 +51,4 @@ export default function UploadError() {
       </Alert>
     </Collapse>
   );
-}
+};

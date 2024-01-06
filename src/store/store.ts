@@ -1,8 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import songReducer from './components/KaraokePlayer/songSlice';
-import uploadErrorReducer from './components/KaraokePlayer/uploadErrorSlice';
-
-
+import songReducer from './songSlice';
+import uploadErrorReducer from './uploadErrorSlice';
 
 export default configureStore({
   reducer: {

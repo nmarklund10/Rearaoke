@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import { light, dark, getCachedTheme } from './Themes';
-import HeadingBar from './components/HeadingBar';
-import Background from './components/Background';
-import KaraokeHolder from './components/KaraokePlayer/KaraokeHolder';
+import { HeadingBar } from './components/HeadingBar';
+import { Background } from './components/Background';
+import { KaraokeHolder } from './components/KaraokePlayer/KaraokeHolder';
 
 export default function App() {
   const [isLightTheme, setTheme] = useState(getCachedTheme());
@@ -14,7 +14,7 @@ export default function App() {
   const handleCallback = () => {
     setTheme(!isLightTheme);
     setAppliedTheme(createTheme(!isLightTheme ? light : dark));
-    localStorage.setItem('theme', !isLightTheme);
+    localStorage.setItem('theme', String(!isLightTheme));
   };
 
   return (
