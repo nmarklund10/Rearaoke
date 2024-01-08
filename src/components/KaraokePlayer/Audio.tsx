@@ -99,6 +99,6 @@ export const Audio = () => {
   return (
     <audio ref={audioRef} onLoadedMetadata={onLoadAudioFile} onError={handleError}
       onTimeUpdate={updateSongCurrentTime} onEnded={restartSong}
-      hidden />
+      hidden/>
   );
 };

@@ -31,7 +31,7 @@ export const AudioProgress = () => {
   console.log(time);
   return (
     <>
-      <LinearProgress sx={classes.audioProgress} variant="determinate" value={progress} />
+      <LinearProgress sx={classes.audioProgress} variant="determinate" value={progress}/>
       <Box component='div' sx={classes.progressText}>
         <span>{time} / {totalTime}</span>
         <Box component='span' sx={classes.audioFileStatus}>{resetAudioFileleStatus}</Box>

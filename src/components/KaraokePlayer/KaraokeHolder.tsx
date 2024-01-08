@@ -30,7 +30,7 @@ export const KaraokeHolder = () => {
               <CardContent>
                 <Typography variant='h3' align='center'>Rearaoke</Typography>
                 <Typography variant='h4' sx={classes.paddedHeader}>Audio Control</Typography>
-                <UploadError />
+                <UploadError/>
                 <Grid container direction='row' wrap='nowrap' spacing={2}>
                   <Grid item>
                     <Audio/>

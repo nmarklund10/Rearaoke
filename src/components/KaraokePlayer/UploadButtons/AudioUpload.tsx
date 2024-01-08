@@ -42,7 +42,7 @@ const AudioUpload = (props: AudioUploadProps) => {
       onInput={onAudioUploadInput} endIcon={<MusicNoteRounded/>}
       disabled={disabled}>
       Audio
-      <input type="file" hidden key={audioKey} />
+      <input type="file" hidden key={audioKey}/>
     </Button>
   );
 };
