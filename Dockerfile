@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:17
+FROM node:20
 
 # set working directory
 WORKDIR /app
@@ -18,4 +18,4 @@ ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN yarn build && yarn global add serve
 
 # start app
-CMD ["serve", "-s", "build"]
+CMD ["serve", "-s", "dist"]
