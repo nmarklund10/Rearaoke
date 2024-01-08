@@ -4,7 +4,7 @@
 
 [Live Website](https://rearaoke-d39ee58f8591.herokuapp.com/)
 
-This is a karaoke web application that lets you upload a [.lrc file](https://en.wikipedia.org/wiki/LRC_(file_format)) and an audio file.  Once the user presses play, the lyrics will be synchronously displayed on the screen to sing along to!  This was an [old project](https://github.com/nmarklund10/WebKaroke) of mine that I originally implemented with Flask (it's rough) 😅.
+This is a karaoke web application that lets you upload a [.lrc file](https://en.wikipedia.org/wiki/LRC_(file_format)) and an audio file.  Once the user presses play, the lyrics will be synchronously displayed on the screen to sing along to!
 
 ![App Screenshot](docs/images/screenshot.png)
 
@@ -17,15 +17,22 @@ docker compose up
 
 ### Install dependencies
 ```
-yarn install
+yarn
 ```
 ### Run Development Mode
 ```
-yarn start
+yarn dev
 ```
-### Run Production Mode
+### Create Production Build
 ```
 yarn build
-yarn global add serve
-serve -s build
+```
+### Run Production Mode
+#### On private machine
+```
+yarn preview
+```
+#### On public machine
+```
+yarn start
 ```
