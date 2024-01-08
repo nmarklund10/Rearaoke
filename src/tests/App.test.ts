@@ -16,7 +16,7 @@
 //     preloadedState: initialState
 //   });
 
-//   const { getByText } = render(<Provider store={store}><LyricWindow /></Provider>);
+//   const { getByText } = render(<Provider store={store}><LyricWindow/></Provider>);
 //   expect(getByText('....')).toBeDefined();
 //   expect(getByText('I took an arrow to the heart')).toBeDefined();
 //   expect(getByText('I never kissed a mouth that tastes like yours')).toBeDefined();

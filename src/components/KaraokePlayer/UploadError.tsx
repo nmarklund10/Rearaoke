@@ -41,7 +41,7 @@ export const UploadError = () => {
             size="small"
             onClick={onAlertClose}
           >
-            <Close fontSize="inherit" />
+            <Close fontSize="inherit"/>
           </IconButton>
         }
         severity="error"

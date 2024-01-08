@@ -132,7 +132,7 @@ export const LyricWindow = () => {
           checked={showLineProgress}
           onClick={toggleShowLineProgress}/>}
         sx={{display: showCheckbox ? 'visible' : 'none'}}
-      />
+     />
       <Grid sx={classes.karaokeLyricWindow}>
         {lyricWindowContent.map((lyricLine, index) => {
           return (lineIsAnimating && index === 0) ?
