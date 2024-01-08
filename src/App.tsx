@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import { light, dark, getCachedTheme } from './Themes';
 import { HeadingBar } from './components/HeadingBar';
@@ -19,16 +19,14 @@ export default function App() {
 
   return (
     <ThemeProvider theme={appliedTheme}>
-      <CssBaseline />
+      <CssBaseline/>
       <HeadingBar isLightTheme={isLightTheme} parentCallback={handleCallback}/>
       <Background/>
-      <Router>
-        <Switch>
-          <Route exact={true} path="/">
-            <KaraokeHolder/>
-          </Route>
-        </Switch>
-      </Router>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<KaraokeHolder/>}/>
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
