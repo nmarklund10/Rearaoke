@@ -17,7 +17,7 @@ docker compose up
 
 ### Install dependencies
 ```
-yarn
+yarn install
 ```
 ### Run Development Mode
 ```
@@ -28,11 +28,12 @@ yarn dev
 yarn build
 ```
 ### Run Production Mode
-#### On private machine
 ```
-yarn preview
+yarn build
+yarn global add serve
+serve -s build
 ```
-#### On public machine
+### On Heroku
 ```
 yarn start
 ```
