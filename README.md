@@ -12,7 +12,7 @@ This is a karaoke web application that lets you upload a [.lrc file](https://en.
 ### Docker
 ```
 docker compose build
-docker compose up
+docker compose up # connect at http://localhost:3001
 ```
 
 ### Install dependencies
@@ -28,12 +28,17 @@ yarn dev
 yarn build
 ```
 ### Run Production Mode
+#### On Remote Server
 ```
 yarn build
 yarn global add serve
-serve -s build
+serve -s dist
 ```
-### On Heroku
+#### On Local Machine
+```
+yarn preview
+```
+#### On Heroku
 ```
 yarn start
 ```
