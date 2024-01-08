@@ -28,7 +28,6 @@ export const AudioProgress = () => {
   const totalTime = duration === UNINIT_NUM ? '..' : secondsToString(duration);
   const resetAudioFileleStatus = src === UNINIT_STR ? 'No song loaded' : '';
   const progress = (duration === UNINIT_NUM || currentTime === UNINIT_NUM) ? 0 : (currentTime / duration) * 100;
-  console.log(time);
   return (
     <>
       <LinearProgress sx={classes.audioProgress} variant="determinate" value={progress}/>
