@@ -31,7 +31,6 @@ export const songSlice = createSlice({
       };
     },
     setSongSrc: (state, action) => {
-
       return {
         ...state,
         value: {
@@ -133,4 +132,4 @@ export const { setSong, setSongSrc, setSongDuration, setSongCurrentTime,
   setSongVolume, resetSong, initializeAudioValues,
   setSongKaraoke } = songSlice.actions;
 
-export default songSlice.reducer;
+export const songReducer = songSlice.reducer;

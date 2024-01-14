@@ -1,14 +1,14 @@
-{
-  "song": {
-    "value": {
-      "title": "Shivers",
-      "artist": "Ed Sheeran",
-      "karaoke": [
+export const mockStoreState = {
+  song: {
+    value: {
+      title: 'Shivers',
+      artist: 'Ed Sheeran',
+      karaoke: [
         {
-          "start": 1,
-          "lyric": "....",
-          "end": 11.08,
-          "letters": [
+          start: 1,
+          lyric: '....',
+          end: 11.08,
+          letters: [
             1,
             3.52,
             6.04,
@@ -16,10 +16,10 @@
           ]
         },
         {
-          "start": 12.08,
-          "lyric": "I took an arrow to the heart",
-          "end": 15.46,
-          "letters": [
+          start: 12.08,
+          lyric: 'I took an arrow to the heart',
+          end: 15.46,
+          letters: [
             12.08,
             12.200714285714286,
             12.321428571428571,
@@ -51,10 +51,10 @@
           ]
         },
         {
-          "start": 15.46,
-          "lyric": "I never kissed a mouth that tastes like yours",
-          "end": 18.87,
-          "letters": [
+          start: 15.46,
+          lyric: 'I never kissed a mouth that tastes like yours',
+          end: 18.87,
+          letters: [
             15.46,
             15.53577777777778,
             15.611555555555556,
@@ -103,10 +103,10 @@
           ]
         },
         {
-          "start": 18.87,
-          "lyric": "Strawberries and somethin more",
-          "end": 22.21,
-          "letters": [
+          start: 18.87,
+          lyric: 'Strawberries and somethin more',
+          end: 22.21,
+          letters: [
             18.87,
             18.977741935483873,
             19.085483870967742,
@@ -141,10 +141,10 @@
           ]
         },
         {
-          "start": 22.21,
-          "lyric": "Ooh, yeah, I want it all",
-          "end": 24.32,
-          "letters": [
+          start: 22.21,
+          lyric: 'Ooh, yeah, I want it all',
+          end: 24.32,
+          letters: [
             22.21,
             22.297916666666666,
             22.385833333333334,
@@ -172,13 +172,16 @@
           ]
         }
       ],
-      "src": "fake/file/path",
-      "seekValue": null,
-      "currentTime": 0,
-      "duration": 24.32,
-      "songPlaying": null,
-      "volume": 1,
-      "changeEnd": false
+      src: 'fake/file/path',
+      seekValue: -5000,
+      currentTime: 0,
+      duration: 24.32,
+      songPlaying: null,
+      volume: 1,
+      changeEnd: false
     }
+  },
+  uploadError: {
+    value: null
   }
-}
+};

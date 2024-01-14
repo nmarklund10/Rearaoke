@@ -1,3 +1,4 @@
+import { rearaokeStore, rearaokeReducers } from './store';
 import { Karaoke } from '../ts/lrcFile.types';
 
 export type SongState = {
@@ -11,7 +12,7 @@ export type SongState = {
     duration: number,
     songPlaying: boolean | null,
     volume: number,
-    changeEnd: true
+    changeEnd: boolean
   }
 }
 
@@ -19,7 +20,5 @@ export type UploadErrorState = {
   value: string | null
 }
 
-export type RearaokeState = {
-  uploadError: UploadErrorState,
-  song: SongState
-}
+export type RearaokeState = ReturnType<typeof rearaokeReducers>;
+export type RearaokeStore = ReturnType<typeof rearaokeStore>;
