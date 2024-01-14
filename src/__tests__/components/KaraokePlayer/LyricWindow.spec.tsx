@@ -1,5 +1,5 @@
-import { LyricWindow } from '../components/KaraokePlayer/LyricWindow';
-import { renderWithProviders } from './testUtils';
+import { LyricWindow } from '../../../components/KaraokePlayer/LyricWindow';
+import { renderWithProviders } from '../../testUtils';
 
 test('check lyric window displays lyrics properly', () => {
   const { getByText } = renderWithProviders(<LyricWindow/>);
