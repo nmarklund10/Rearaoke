@@ -9,7 +9,7 @@ const classes = {
     height: '100%',
     minHeight: '5em',
     margin: (theme: Theme) => theme.spacing(1),
-    backgroundColor: (theme: Theme) => theme.palette.secondary.main,
+    backgroundColor: (theme: Theme) => theme.palette.secondary.main
   },
   karaokeLine: {
     padding: (theme: Theme) => theme.spacing(1),
@@ -19,7 +19,7 @@ const classes = {
     fontWeight: 'bold'
   },
   karaokePos: {
-    color: (theme: Theme) => theme.palette.primary.main,
+    color: (theme: Theme) => theme.palette.primary.main
   },
   unAnimatedLine: {
     fontSize: '1.25rem'

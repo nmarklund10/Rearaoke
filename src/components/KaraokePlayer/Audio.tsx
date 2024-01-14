@@ -78,7 +78,11 @@ export const Audio = () => {
     const audioDuration = audioRef.current.duration;
     if (!changeEnd && (audioDuration < lrcDuration)) {
       dispatch(setSongSrc(UNINIT_STR));
-      dispatch(setUploadError(`Audio file (${audioDuration}) is shorter than LRC indicates (${lrcDuration}).`));
+      dispatch(
+        setUploadError(
+          `Audio file (${audioDuration}) is shorter than LRC indicates (${lrcDuration}).`
+        )
+      );
     }
     else {
       dispatch(setSongDuration(audioDuration));

@@ -14,7 +14,7 @@ export const dark: ThemeOptions = {
   palette: {
     mode: 'dark',
     primary: {
-      main: indigo[900],
+      main: indigo[900]
     },
     background: {
       paper: grey[800]

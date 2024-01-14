@@ -124,7 +124,7 @@ export const songSlice = createSlice({
         }
       };
     }
-  },
+  }
 });
 
 // Action creators are generated for each case reducer function
