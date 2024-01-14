@@ -37,7 +37,8 @@ const ControlButton = (props: ControlButtonProps) => {
   return (
     <Button sx={classes.controlButton} disabled={props.disabled}
       onClick={songPlaying ? pauseSong : playSong}
-      disableRipple={true}>
+      disableRipple={true}
+    >
       {songPlaying ? <Pause/> : <PlayArrowRounded/>}
     </Button>
   );

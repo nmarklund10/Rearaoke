@@ -23,7 +23,8 @@ export const KaraokeHolder = () => {
   return (
     <>
       <Grid sx={classes.karaokeContainer} container direction='column'
-        alignItems='center' justifyContent='center'>
+        alignItems='center' justifyContent='center'
+      >
         <Grid item>
           <Paper variant='outlined' sx={classes.karaokeHolder}>
             <Card>

@@ -128,9 +128,7 @@ export const LyricWindow = () => {
     <>
       <FormControlLabel
         label="Show line progress"
-        control={<Checkbox
-          checked={showLineProgress}
-          onClick={toggleShowLineProgress}/>}
+        control={<Checkbox checked={showLineProgress} onClick={toggleShowLineProgress}/>}
         sx={{ display: showCheckbox ? 'visible' : 'none' }}
       />
       <Grid sx={classes.karaokeLyricWindow}>

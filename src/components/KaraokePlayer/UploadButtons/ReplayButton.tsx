@@ -30,7 +30,8 @@ const ReplayButton = (props: ReplayButtonProps) => {
 
   return (
     <Button sx={classes.replayButton} disableRipple={true}
-      onClick={replaySong} disabled={props.disabled}>
+      onClick={replaySong} disabled={props.disabled}
+    >
       <ReplayRounded/>
     </Button>
   );

@@ -8,7 +8,7 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'eslint-plugin-react'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'comma-dangle': ['error', 'never'],
@@ -21,6 +21,8 @@ module.exports = {
     'key-spacing': ['error'],
     'array-bracket-spacing': ['error', 'never'],
     'quote-props': ['error', 'as-needed'],
-    'eol-last': ['error', 'always']
+    'eol-last': ['error', 'always'],
+    'react/self-closing-comp': ['error', { 'component': true, 'html': true }],
+    'react/jsx-closing-bracket-location': ['error', 'tag-aligned']
   },
 };
