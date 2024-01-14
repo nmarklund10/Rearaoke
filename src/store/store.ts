@@ -1,10 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit';
-import songReducer from './songSlice';
-import uploadErrorReducer from './uploadErrorSlice';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { songReducer } from './songSlice';
+import { uploadErrorReducer } from './uploadErrorSlice';
 
-export default configureStore({
-  reducer: {
-    song: songReducer,
-    uploadError: uploadErrorReducer
-  }
+export const rearaokeReducers = combineReducers({
+  song: songReducer,
+  uploadError: uploadErrorReducer
 });
+
+export const rearaokeStore = (preloadedState?: Partial<ReturnType<typeof rearaokeReducers>>) => {
+  return configureStore({
+    reducer: rearaokeReducers,
+    preloadedState
+  });
+};
