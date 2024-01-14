@@ -19,6 +19,7 @@ module.exports = {
     semi: ['error', 'always'],
     'object-curly-spacing': ['error', 'always'],
     'key-spacing': ['error'],
-    'array-bracket-spacing': ['error', 'never']
+    'array-bracket-spacing': ['error', 'never'],
+    'quote-props': ['error', 'as-needed']
   },
 };
