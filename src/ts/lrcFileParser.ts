@@ -88,9 +88,9 @@ const parseMetaLine = (textInsideBrackets: string, colonIndex: number): ParsedLr
     textInsideBrackets.slice(colonIndex + 1).trim()];
   switch(field) {
   case 'ar':
-    return {artist: text};
+    return { artist: text };
   case 'ti':
-    return {title: text};
+    return { title: text };
   default:
     return null;
   }
@@ -117,7 +117,9 @@ const addLyricLine = (karaoke: Karaoke, lrcLine: ParsedLyricLine) => {
     if (previousLyric.end <= previousLyric.start) {
       throw new Error(`LRC times not properly sorted at line ${numLyrics}`);
     }
-    previousLyric.letters = calculateLetterTimes(previousLyric.start, previousLyric.lyric, previousLyric.end);
+    previousLyric.letters = calculateLetterTimes(
+      previousLyric.start, previousLyric.lyric, previousLyric.end
+    );
   }
   if (lrcLine.lyric !== '') {
     if ((lrcLine.time - previousLyric.end) >= BREAK_TIME) {

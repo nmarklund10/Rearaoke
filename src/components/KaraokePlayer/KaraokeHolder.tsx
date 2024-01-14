@@ -11,7 +11,7 @@ const classes = {
     height: '100%'
   },
   karaokeHolder: {
-    zIndex: '10',
+    zIndex: '10'
   },
   paddedHeader: {
     paddingTop: (theme: Theme) => theme.spacing(2),
@@ -40,8 +40,18 @@ export const KaraokeHolder = () => {
                     <AudioProgress/>
                   </Grid>
                 </Grid>
-                <Typography variant='subtitle1'>Find .lrc files <Link rel='noopener noreferrer' target='_blank' href='https://www.lyricsify.com/'>here</Link></Typography>
-                <Typography variant='subtitle1'>Convert Youtube videos to audio <Link rel='noopener noreferrer' target='_blank' href='https://320ytmp3.com/'>here</Link></Typography>
+                <Typography variant='subtitle1'>
+                  Find .lrc files&nbsp;
+                  <Link rel='noopener noreferrer' target='_blank' href='https://www.lyricsify.com/'>
+                    here
+                  </Link>
+                </Typography>
+                <Typography variant='subtitle1'>
+                  Convert Youtube videos to audio&nbsp;
+                  <Link rel='noopener noreferrer' target='_blank' href='https://320ytmp3.com/'>
+                    here
+                  </Link>
+                </Typography>
                 <Typography variant='h4' sx={classes.paddedHeader}>Lyric Window</Typography>
                 <NowPlaying/>
                 <LyricWindow/>

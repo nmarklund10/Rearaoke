@@ -9,7 +9,7 @@ const classes = {
     height: '100%',
     minHeight: '5em',
     margin: (theme: Theme) => theme.spacing(1),
-    backgroundColor: (theme: Theme) => theme.palette.secondary.main,
+    backgroundColor: (theme: Theme) => theme.palette.secondary.main
   },
   karaokeLine: {
     padding: (theme: Theme) => theme.spacing(1),
@@ -19,7 +19,7 @@ const classes = {
     fontWeight: 'bold'
   },
   karaokePos: {
-    color: (theme: Theme) => theme.palette.primary.main,
+    color: (theme: Theme) => theme.palette.primary.main
   },
   unAnimatedLine: {
     fontSize: '1.25rem'
@@ -38,9 +38,9 @@ export const LyricWindow = () => {
   const [letterIndex, setLetterIndex] = useState(0);
   const [lineIsAnimating, setLineIsAnimating] = useState(false);
   const DEFAULT_LYRIC_CONTENT = useMemo(() => {
-    const PLACEHOLDER = {start: -1, end: -1};
-    return [{...PLACEHOLDER, lyric: 'No lyrics to display'},
-      {...PLACEHOLDER, lyric: 'Upload an LRC file and audio file to get started'}];
+    const PLACEHOLDER = { start: -1, end: -1 };
+    return [{ ...PLACEHOLDER, lyric: 'No lyrics to display' },
+      { ...PLACEHOLDER, lyric: 'Upload an LRC file and audio file to get started' }];
   }, []);
   const [lyricWindowContent, setLyricWindowContent] = useState(DEFAULT_LYRIC_CONTENT);
 
@@ -131,8 +131,8 @@ export const LyricWindow = () => {
         control={<Checkbox
           checked={showLineProgress}
           onClick={toggleShowLineProgress}/>}
-        sx={{display: showCheckbox ? 'visible' : 'none'}}
-     />
+        sx={{ display: showCheckbox ? 'visible' : 'none' }}
+      />
       <Grid sx={classes.karaokeLyricWindow}>
         {lyricWindowContent.map((lyricLine, index) => {
           return (lineIsAnimating && index === 0) ?

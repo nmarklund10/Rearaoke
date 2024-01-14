@@ -4,31 +4,21 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
+    'plugin:react-hooks/recommended'
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-    indent: [
-      'error',
-      2
-    ],
-    'linebreak-style': [
-      'error',
-      'unix'
-    ],
-    quotes: [
-      'error',
-      'single'
-    ],
-    semi: [
-      'error',
-      'always'
-    ]
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    'comma-dangle': ['error', 'never'],
+    'max-len': ['error', { 'code': 100 }],
+    indent: ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single'],
+    semi: ['error', 'always'],
+    'object-curly-spacing': ['error', 'always'],
+    'key-spacing': ['error'],
+    'array-bracket-spacing': ['error', 'never']
   },
 };

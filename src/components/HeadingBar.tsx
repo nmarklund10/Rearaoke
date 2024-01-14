@@ -8,7 +8,7 @@ const classes = {
     backgroundColor: (theme: Theme) => theme.palette.primary.main
   },
   title: {
-    flexGrow: 1,
+    flexGrow: 1
   }
 };
 

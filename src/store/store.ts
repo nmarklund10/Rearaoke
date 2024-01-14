@@ -6,5 +6,5 @@ export default configureStore({
   reducer: {
     song: songReducer,
     uploadError: uploadErrorReducer
-  },
+  }
 });

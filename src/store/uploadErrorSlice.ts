@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const uploadErrorSlice = createSlice({
   name: 'uploadError',
   initialState: {
-    value: null,
+    value: null
   },
   reducers: {
     setUploadError: (state, action) => {
@@ -11,8 +11,8 @@ export const uploadErrorSlice = createSlice({
         ...state,
         value: action.payload
       };
-    },
-  },
+    }
+  }
 });
 
 // Action creators are generated for each case reducer function
