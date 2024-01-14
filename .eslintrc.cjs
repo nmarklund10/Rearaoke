@@ -20,6 +20,7 @@ module.exports = {
     'object-curly-spacing': ['error', 'always'],
     'key-spacing': ['error'],
     'array-bracket-spacing': ['error', 'never'],
-    'quote-props': ['error', 'as-needed']
+    'quote-props': ['error', 'as-needed'],
+    'eol-last': ['error', 'always']
   },
 };
