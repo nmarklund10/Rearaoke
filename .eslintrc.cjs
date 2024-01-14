@@ -8,16 +8,17 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh', '@stylistic/ts'],
+  plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'comma-dangle': ['error', 'never'],
-    'max-len': ["error", { "code": 100 }],
+    'max-len': ['error', { 'code': 100 }],
     indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
-    '@stylistic/ts/object-curly-spacing': ['error', 'always'],
-    '@stylistic/ts/key-spacing': ['error', { beforeColon: false }]
+    'object-curly-spacing': ['error', 'always'],
+    'key-spacing': ['error'],
+    'array-bracket-spacing': ['error', 'never']
   },
 };
