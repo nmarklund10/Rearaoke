@@ -30,7 +30,6 @@
     "start": "vite preview --port $PORT --host 0.0.0.0"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin-ts": "^1.5.3",
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
     "@types/jest": "^29.5.11",
