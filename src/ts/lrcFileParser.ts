@@ -88,9 +88,9 @@ const parseMetaLine = (textInsideBrackets: string, colonIndex: number): ParsedLr
     textInsideBrackets.slice(colonIndex + 1).trim()];
   switch(field) {
   case 'ar':
-    return {artist: text};
+    return { artist: text };
   case 'ti':
-    return {title: text};
+    return { title: text };
   default:
     return null;
   }

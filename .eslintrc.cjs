@@ -8,7 +8,10 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: [
+    'react-refresh',
+    '@stylistic/js'
+  ],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
@@ -29,6 +32,7 @@ module.exports = {
     semi: [
       'error',
       'always'
-    ]
+    ],
+    '@stylistic/js/object-curly-spacing': ["error", "always"]
   },
 };
