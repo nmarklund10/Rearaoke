@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { UploadErrorState } from './store.type';
 
 export const uploadErrorSlice = createSlice({
   name: 'uploadError',
   initialState: {
     value: null
-  },
+  } as UploadErrorState,
   reducers: {
     setUploadError: (state, action) => {
       return {
