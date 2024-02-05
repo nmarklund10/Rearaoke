@@ -29,6 +29,7 @@ module.exports = {
     'react/jsx-closing-bracket-location': ['error', 'tag-aligned'],
     'react/jsx-closing-tag-location': ['error', 'always'],
     'react/jsx-curly-spacing': ['error', { 'when': 'never', 'children': true }],
+    'jsx-quotes': ['error', 'prefer-single'],
     'react/jsx-tag-spacing': [
       'error',
       {

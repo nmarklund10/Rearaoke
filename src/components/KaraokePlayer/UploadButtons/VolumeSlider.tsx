@@ -36,8 +36,8 @@ const VolumeSlider = (props: VolumeSliderProps) => {
   return (
     <>
       <VolumeDownRounded/>
-      <Slider sx={classes.volumeSlider} aria-label="Volume"
-        value={volume}  valueLabelDisplay="auto"
+      <Slider sx={classes.volumeSlider} aria-label='Volume'
+        value={volume}  valueLabelDisplay='auto'
         onChange={onVolumechange} disabled={props.disabled}
       />
       <VolumeUpRounded/>

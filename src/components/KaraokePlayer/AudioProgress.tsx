@@ -31,7 +31,7 @@ export const AudioProgress = () => {
     (duration === UNINIT_NUM || currentTime === UNINIT_NUM) ? 0 : (currentTime / duration) * 100;
   return (
     <>
-      <LinearProgress sx={classes.audioProgress} variant="determinate" value={progress}/>
+      <LinearProgress sx={classes.audioProgress} variant='determinate' value={progress}/>
       <Box component='div' sx={classes.progressText}>
         <span>{time} / {totalTime}</span>
         <Box component='span' sx={classes.audioFileStatus}>{resetAudioFileleStatus}</Box>

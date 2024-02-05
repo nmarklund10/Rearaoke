@@ -36,15 +36,15 @@ export const UploadError = () => {
       <Alert
         action={
           <IconButton
-            aria-label="close"
-            color="inherit"
-            size="small"
+            aria-label='close'
+            color='inherit'
+            size='small'
             onClick={onAlertClose}
           >
-            <Close fontSize="inherit"/>
+            <Close fontSize='inherit'/>
           </IconButton>
         }
-        severity="error"
+        severity='error'
         sx={classes.alertBox}
       >
         {uploadError}

@@ -28,7 +28,7 @@ export const UploadButtons = () => {
   return (
     <>
       <FormGroup sx={classes.controls}>
-        <ButtonGroup disableElevation={true} variant="contained">
+        <ButtonGroup disableElevation={true} variant='contained'>
           <LrcUpload uploadButtonClass={classes.uploadButton}/>
           <AudioUpload uploadButtonClass={classes.uploadButton} disabled={audioButtonDisabled}/>
           <ControlButton disabled={controlButtonsDisabled}/>
