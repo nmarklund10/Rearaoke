@@ -14,6 +14,6 @@ const classes = {
 
 export const Background = () => {
   return (
-    <Box component='canvas' id='bg' sx={classes.bg}/>
+    <Box component='canvas' id='bg' data-testid='bg' sx={classes.bg}/>
   );
 };
