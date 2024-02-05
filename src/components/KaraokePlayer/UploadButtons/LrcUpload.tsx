@@ -50,11 +50,11 @@ const LrcUpload = (props: LrcUploadProps) => {
   };
 
   return (
-    <Button sx={uploadButtonClass} component="label"
+    <Button sx={uploadButtonClass} component='label'
       onInput={onLrcUploadInput} endIcon={<AttachFileRounded/>}
     >
       .LRC
-      <input type="file" hidden key={lrcKey}/>
+      <input type='file' hidden key={lrcKey}/>
     </Button>
   );
 };

@@ -38,12 +38,12 @@ const AudioUpload = (props: AudioUploadProps) => {
   };
 
   return (
-    <Button sx={uploadButtonClass} component="label"
+    <Button sx={uploadButtonClass} component='label'
       onInput={onAudioUploadInput} endIcon={<MusicNoteRounded/>}
       disabled={disabled}
     >
       Audio
-      <input type="file" hidden key={audioKey}/>
+      <input type='file' hidden key={audioKey}/>
     </Button>
   );
 };

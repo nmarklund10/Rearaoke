@@ -24,7 +24,7 @@ export default function App() {
       <Background/>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<KaraokeHolder/>}/>
+          <Route path='/' element={<KaraokeHolder/>}/>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

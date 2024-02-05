@@ -100,8 +100,10 @@ export const LyricWindow = () => {
     return (
       <Typography key={index} sx={classes.karaokeLine} variant={'h5'}>
         <Box component='div' sx={classes.animatedLine}>
-          <Box component='span' sx={classes.karaokePos}>{highlightedText}</Box>
-          <Box component='span'>{unHighlightedText}</Box>
+          <Box component='span' data-testid='highlighted' sx={classes.karaokePos}>
+            {highlightedText}
+          </Box>
+          <Box component='span' data-testid='unhighlighted'>{unHighlightedText}</Box>
         </Box>
       </Typography>
     );
@@ -127,7 +129,7 @@ export const LyricWindow = () => {
   return (
     <>
       <FormControlLabel
-        label="Show line progress"
+        label='Show line progress'
         control={<Checkbox checked={showLineProgress} onClick={toggleShowLineProgress}/>}
         sx={{ display: showCheckbox ? 'visible' : 'none' }}
       />
